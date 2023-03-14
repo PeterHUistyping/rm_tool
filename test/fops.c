@@ -1,5 +1,3 @@
-
-ssize_t seeking_read(struct file *filp, char __user *buff, size_t count,
  		 loff_t *f_pos)
 {
 	struct seeking_dev *dev = filp->private_data;

@@ -8,5 +8,6 @@ cd ..
 ./rm_tool
 echo ---Starting to delete unused code---
 ./deleteList.sh
-mv ./deleteList.sh ./deletedLog/
+mkdir deletedLog
+mv deleteList.sh ./deletedLog/deleteList_`date +%Y_%m_%d_%H-%M-%S`.sh
 echo ------Deleting unused code Done!------
