@@ -1,16 +1,4 @@
 
-#include "main.h"
-#include "fops.h"
-
-int seeking_open(struct inode *inode, struct file *filp)
-{
-	pr_debug("%s() is invoked\n", __FUNCTION__);
-
-	filp->private_data = container_of(inode->i_cdev, struct seeking_dev, cdev);
-
-	return 0;
-}
-
 ssize_t seeking_read(struct file *filp, char __user *buff, size_t count,
  		 loff_t *f_pos)
 {
