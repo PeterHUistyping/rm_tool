@@ -8,7 +8,6 @@ void print_deleteList(){
     fclose(fp);
 }
 int main(){
-    print_deleteList();
-   
+   print_deleteList();  
    return(0);
 }
