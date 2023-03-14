@@ -9,5 +9,5 @@ cd ..
 echo ---Starting to delete unused code---
 ./deleteList.sh
 mkdir deletedLog
-mv deleteList.sh ./deletedLog/deleteList_`date +%Y_%m_%d_%H-%M-%S`.sh
+mv deleteList.sh ./deletedLog/deleteList_`date +%Y_%m_%d_%H-%M-%S`.log
 echo ------Deleting unused code Done!------
