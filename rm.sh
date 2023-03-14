@@ -6,3 +6,4 @@ make
 cp rm_tool ../rm_tool
 cd ..
 ./rm_tool
+./delete.sh
