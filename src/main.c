@@ -169,7 +169,7 @@ void process_search_log(FILE *fp,FILE *fp_d){
                     for(int i=0;i<len;i++){
                         printf("%c",current_line[i]);
                     }
-                    printf("| (range of file name: %d)\n ",len);
+                    printf("| (range of file name: %d)\n",len);
                 }
                 
                 first_colon_len=len;
