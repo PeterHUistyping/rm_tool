@@ -25,16 +25,15 @@ void file_data(FILE *fp){
     printf("Max_len: %d \n",max_len);
     rewind(fp);
 }
-void print_deleteList(){
-    FILE * fp;
-    fp = fopen ("deleteList.sh", "w+");
-    fprintf(fp, "# The below shell commands will be run by linux bash and stored as log.\n");
-    fprintf(fp, "sed -i '%dd' '%s'\n", 4,"test/fops.h");
-    fprintf(fp, "sed -i '%d,%dd' '%s'\n", 1,2, "test/fops.c");
-    fclose(fp);
+void print_singledeleteList(FILE *fp,int st_line){
+    fprintf(fp, "sed -i '%dd' '%s'\n", st_line,"test/fops.h");
+}
+void print_deleteList(FILE *fp,int st_line, int end_line){
+    fprintf(fp, "sed -i '%d,%dd' '%s'\n", st_line,end_line, "test/fops.c");
 }
 
-void process_search_log(FILE *fp){
+
+void process_search_log(FILE *fp,FILE *fp_d){
     int lines = 0; // lines of the file
     int ch = 0;
     int loop_id=1;
@@ -95,6 +94,7 @@ void process_search_log(FILE *fp){
                     }    
                     if (operation==2){
                         printf("[DELETE] Valid input, well received!\n");
+                        print_singledeleteList(fp_d,1);
                         break;
                     }    
                     if (operation==0){
@@ -130,32 +130,23 @@ void process_search_log(FILE *fp){
     printf("Max_len: %d \n",max_len);
     rewind(fp);
 }
-void open_search(FILE *fp){
-     fp= fopen("./log/search_res.log","r");
+void openfile_check(FILE *fp){
      if(fp == NULL)
     {
       printf("Error when opening the file!\n");   
       exit(1);             
     }
 }
-void open_deleteList(FILE *fp){
-    fp = fopen ("deleteList.sh", "w+");
-    if(fp == NULL)
-    {
-      printf("Error when opening the file!\n");   
-      exit(1);             
-    }
-    fprintf(fp, "# The below shell commands will be run by linux bash and stored as log.\n");
-}
 int main(){
-    FILE *fp_search;
-    FILE * fp_deleteList;
     printf("------WELCOME to USE rm_tool 2023!------\n");   
-    open_search(fp_search);
-    open_deleteList(fp_deleteList);
+    FILE * fp_search= fopen("./log/search_res.log","r");
+    FILE * fp_deleteList = fopen ("deleteList.sh", "w+");
+    openfile_check(fp_search);
+    openfile_check(fp_deleteList);
+    fprintf(fp_deleteList, "# The below shell commands will be run by linux bash and stored as log.\n");
 
     file_data(fp_search);
-    process_search_log(fp_search);
+    process_search_log(fp_search,fp_deleteList);
     fclose(fp_search);  
     fclose(fp_deleteList);
     // print_deleteList();
