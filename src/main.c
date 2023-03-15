@@ -5,6 +5,8 @@
 char current_line[1000]; // search_res.log
 char filename_last[1000];
 int first_colon_len=0;
+int line_int=0;
+bool exit_loop=false;
 void file_data(FILE *fp){
     int lines = 0; // lines of the file
     int ch = 0;
@@ -40,24 +42,56 @@ void print_deleteList(FILE *fp,int st_line, int end_line){
     }
     fprintf(fp,"\n");
 }
-
+void switch_input(FILE *fp_d, int* line_delta){
+        int operation=0;
+        while( 1 ){
+            printf("\033[1mPlease enter your operation choice:  ");    //bold
+            printf("\033[0m\n");//black
+            printf("0 for [exit]; 1 for [SKIP]\n2 for [DELETE single line]     INPUT[0-2]:"); 
+            printf("     INPUT[0-2]:"); 
+            scanf("%d",&operation);
+            if (operation == 1){
+                printf("\033[32m[SKIP] Valid input, well received!\n"); //green
+                printf("\033[0m\n"); //black
+                break;
+            }    
+            if (operation==2){
+                printf("\033[31m[DELETE single line] Valid input, well received!\n"); //red
+                printf("\033[0m\n");//black
+                print_singledeleteList(fp_d,line_int-*line_delta);
+                *line_delta+=1;
+                break;
+            }    
+            if (operation==0){
+                printf("\033[32m[EXIT] Valid input, well received!\n"); //green
+                printf("\033[0m\n");//black
+                exit_loop=true;
+                break;
+            }    
+            else if(operation != 2 && operation!=1 && operation!=0){
+                printf("\033[33mFailure, invalid input %d ! Please retry or exit. ",operation); //yellow
+                printf("\033[0m\n");//black
+                continue;
+            }
+    }   
+}
 
 void process_search_log(FILE *fp,FILE *fp_d){
     int lines = 0; // lines of the file
     int ch = 0;
-    int loop_id=1;
+    int loop_id=1,loop_fileid=1;
     int len = 0;//  length of line, changing from 0 - current value
     int max_len = 0;//  max length of line
     int max_file_size =0; // file length size 
     bool first_colon=true;
     bool second_colon=false;
     bool first_hit_colon=true;
-    bool exit=false;
     bool same_file=false;
-    int operation=0;
     int line_delta=0;
     char filename_delete[1000]; 
-    printf("----------------rm id: %d----------------\n",loop_id++);
+ 
+    printf("\033[1m----------------rm id: %d file:%d----------------\n",loop_id++,loop_fileid);
+    printf("\033[0m\n");//black
     while((ch = fgetc(fp))!=EOF){//!
         if(ch==':'){
             if (first_colon){
@@ -69,6 +103,8 @@ void process_search_log(FILE *fp,FILE *fp_d){
                     }
                     else{//new file
                         line_delta=0;
+                        loop_id=1;
+                        loop_fileid++;
                     }
                 }
                 else{
@@ -91,59 +127,38 @@ void process_search_log(FILE *fp,FILE *fp_d){
             }
             else if(second_colon){
                 printf("line: |");
-                int line_int=0;
+                line_int=0;
                 for(int i=first_colon_len;i<len;i++){
                     line_int=line_int*10+current_line[i]-'0';
                     printf("%c",current_line[i]);
-                   
                 }     
                 printf(" %d",line_int);
                 printf("| (range of len: %d-%d), \n \n",first_colon_len,len);
                 second_colon=false;
                 same_file=false;
-                while( 1 ){
-                    printf("\033[1mPlease enter your operation choice: 2 for [DELETE] and 1 for [NOT]. 0 for[exit]");    //bold
-                    printf("\033[0m\n");//black
-                    scanf("%d",&operation);
-                    if (operation == 1){
-                        printf("\033[32m[NOT] Valid input, well received!\n"); //green
-                        printf("\033[0m\n"); //black
-                        break;
-                    }    
-                    if (operation==2){
-                        printf("\033[31m[DELETE] Valid input, well received!\n"); //red
-                        printf("\033[0m\n");//black
-                        print_singledeleteList(fp_d,line_int-line_delta);
-                        line_delta+=1;
-                        break;
-                    }    
-                    if (operation==0){
-                        printf("\033[32m[EXIT] Valid input, well received!\n"); //green
-                        printf("\033[0m\n");//black
-                        exit=true;
-                        break;
-                    }    
-                    else if(operation != 2 && operation!=1 && operation!=0){
-                        printf("\033[33mFailure, invalid input %d",operation); //yellow
-                        printf("\033[0m\n");//black
-                        continue;
-                    }
-                }   
+              
             }
         }
-        if(exit){
+        if(exit_loop){
             break;
         }
         current_line[len]=ch;
         ++len;
         if(ch == '\n'){
+            for(int i=0;i<len;i++){
+                printf("%c",current_line[i]);
+            }  
+            printf("\n");
+            switch_input(fp_d, & line_delta);
+
             if(max_len < len)
                 max_len = len;
             ++lines;
             len = 0;
             first_colon=true;
             second_colon=false;
-            printf("---rm id: %d---\n",loop_id++);
+            printf("\033[1m----------------rm id: %d file:%d----------------\n",loop_id++,loop_fileid);
+            printf("\033[0m\n");//black
         }
     }
     if(len)
