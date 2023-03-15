@@ -18,6 +18,7 @@ generate deletedLog with timestamp.
 1. skip
 2. rm variable/single line
 3. vim
+    flush -> redo ack search
 4. rm specific lines
     Delete Multiple Lines is asynchronous, it will trigger flush and reload by design
 5. rm function

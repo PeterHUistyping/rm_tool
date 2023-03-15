@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <time.h>
 # define buffer_size 1000
 char current_line[buffer_size]; // search_res.log
 char filename_last[buffer_size]; //current for future use 
@@ -20,6 +21,13 @@ enum op {
     Last = delete_multiple,
     
 };
+void openfile_check(FILE *fp){
+     if(fp == NULL)
+    {
+      printf("Error when opening the file!\n");   
+      exit(1);             
+    }
+}
 void file_data(FILE *fp){
     int lines = 0; // lines of the file
     int ch = 0;
@@ -55,7 +63,39 @@ void print_deleteList(FILE *fp,int st_line, int end_line){
     }
     fprintf(fp,"\n");
 }
-void switch_input(FILE *fp_d, int* line_delta){
+void flush_delete(FILE *fp,FILE *fp_d){
+    char temp[buffer_size];
+    // strcat(temp, filename_last);
+    // strcat(temp, ".log");
+    
+    struct tm *timenow;
+    time_t now = time(NULL);
+    timenow = gmtime(&now);
+   
+    
+    fflush(fp_d);
+    fflush(fp);
+    fclose(fp_d);
+    fclose(fp);
+   
+ 
+    execl("/usr/bin/bash","/usr/bin/bash","deleteList.sh",NULL);
+    strftime(temp, sizeof(temp), "searchLog/searchList_%Y-%m-%d_%H-%M-%S.log", timenow);
+    char *path = temp;
+    execl("/usr/bin/mv","/usr/bin/mv","searchLog/searchList.log",path,NULL);    
+    strftime(temp, sizeof(temp), "deletedLog/deleteList_%Y-%m-%d_%H-%M-%S.log", timenow);  
+    path = temp; 
+    execl("/usr/bin/mv","/usr/bin/mv","deleteList.sh",path,NULL);
+
+    fp_d = fopen ("deleteList.sh", "w+");
+    fp= fopen("./searchLog/searchList.log","r");
+    openfile_check(fp);
+    openfile_check(fp_d);
+    fprintf(fp, "# The below shell commands will be run by linux bash and stored as log.\n");
+    execl("/usr/bin/ack","/usr/bin/ack","pixel ./test > searchLog/searchList.log",NULL);
+
+}
+void switch_input(FILE *fp,FILE *fp_d, int* line_delta){
         int operation=0;
         int st_line,end_line;
         while( 1 ){
@@ -77,12 +117,16 @@ void switch_input(FILE *fp_d, int* line_delta){
                     printf("\033[1mPlease enter the last line for deletion:");
                     printf("\033[0m\n");//black
                     scanf("%d",&end_line);
-                    *line_delta+=(end_line-st_line+1);
+
                     printf("\033[32mDelete multiple lines is asynchronous, flushing and reloading by design!\n"); //green
                     printf("\033[0m\n");//black
                     printf("Please wait until the program is reloading and processing the deletion thanks! \nInput ANY character to confirm acknowledge: ");//black
                     char temp[buffer_size];
                     scanf("%s",temp);
+                   
+                    *line_delta=0;
+                    print_deleteList(fp_d,st_line,end_line);
+                    
                 case exit_switch:
                     printf("\033[32m[EXIT and Flush] Well received!\n"); //green
                     printf("\033[0m\n");//black
@@ -103,15 +147,21 @@ void switch_input(FILE *fp_d, int* line_delta){
                     printf("\033[0m\n");//black
                     pid_t childPid = fork();
                     int status;
-                    if (childPid) {      
+                    
+                    if (childPid) {
+                        flush_delete(fp,fp_d);      
                     }
                     else {
-                        char filename_current_full[buffer_size]="./"; 
+                        char filename_current_full[buffer_size]; 
+                        filename_current_full[0]='.'; 
+                        filename_current_full[1]='/'; 
+                        filename_current_full[2]='\0'; 
                         strcat(filename_current_full, filename_last);
-                        char * path = filename_current_full;
+                        char* path = filename_current_full;
                         char lines_temp[buffer_size]="+"; 
                         strcat(lines_temp, current_line_num);
                         char * lines_ = lines_temp;
+                        
                         execl("/usr/bin/vim","/usr/bin/vim",lines_,path,NULL);         
                     }
                     break;
@@ -165,11 +215,12 @@ void process_search_log(FILE *fp,FILE *fp_d){
                 strncpy(filename_last, current_line, len);
 
                 if (first_hit_colon||!same_file){
-                    printf("file name: |");
+                    printf("File Name: |");
                     for(int i=0;i<len;i++){
                         printf("%c",current_line[i]);
                     }
-                    printf("| (range of file name: %d)\n",len);
+                    // printf("| (range of file name: %d)\n",len);
+                    printf("|   ");
                 }
                 
                 first_colon_len=len;
@@ -178,7 +229,7 @@ void process_search_log(FILE *fp,FILE *fp_d){
                 second_colon=true;
             }
             else if(second_colon){
-                printf("line: |");
+                printf("Line: |");
                 line_int=0;
                 int temp_i=0;
                 for(int i=first_colon_len;i<len;i++){
@@ -188,7 +239,8 @@ void process_search_log(FILE *fp,FILE *fp_d){
                 }     
                 current_line_num[temp_i++]='\0';
                 printf(" %d",line_int);
-                printf("| (range of len: %d-%d), \n \n",first_colon_len,len);
+                // printf("| (range of len: %d-%d), \n \n",first_colon_len,len);
+                printf("| \n \n");
                 second_colon=false;
                 same_file=false;
             }
@@ -204,7 +256,7 @@ void process_search_log(FILE *fp,FILE *fp_d){
                 printf("%c",current_line[i]);
             }  
             printf("\n");
-            switch_input(fp_d, & line_delta);
+            switch_input(fp,fp_d, & line_delta);
 
             if(max_len < len)
                 max_len = len;
@@ -222,13 +274,7 @@ void process_search_log(FILE *fp,FILE *fp_d){
     printf("Max_len: %d \n",max_len);
     rewind(fp);
 }
-void openfile_check(FILE *fp){
-     if(fp == NULL)
-    {
-      printf("Error when opening the file!\n");   
-      exit(1);             
-    }
-}
+
 int main(){
     printf("------WELCOME to USE rm_tool 2023!------\n");   
     FILE * fp_search= fopen("./searchLog/searchList.log","r");
