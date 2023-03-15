@@ -4,6 +4,7 @@
 #include <string.h>
 char filename[1000]; // search_res.log
 char filename_last[1000];
+int first_colon_len=0;
 void file_data(FILE *fp){
     int lines = 0; // lines of the file
     int ch = 0;
@@ -26,10 +27,18 @@ void file_data(FILE *fp){
     rewind(fp);
 }
 void print_singledeleteList(FILE *fp,int st_line){
-    fprintf(fp, "sed -i '%dd' '%s'\n", st_line,"test/fops.h");
+    fprintf(fp, "sed -i '%dd' ", st_line);   
+    for(int i=0;i<first_colon_len-1;i++){
+        fprintf(fp,"%c",filename[i]);
+    }
+    fprintf(fp,"\n");
 }
 void print_deleteList(FILE *fp,int st_line, int end_line){
-    fprintf(fp, "sed -i '%d,%dd' '%s'\n", st_line,end_line, "test/fops.c");
+    fprintf(fp, "sed -i '%d,%dd' ", st_line,end_line);
+    for(int i=0;i<first_colon_len-1;i++){
+        fprintf(fp,"%c",filename[i]);
+    }
+    fprintf(fp,"\n");
 }
 
 
@@ -44,9 +53,10 @@ void process_search_log(FILE *fp,FILE *fp_d){
     bool second_colon=false;
     bool first_hit_colon=true;
     bool exit=false;
-    int first_colon_len=0;
     bool same_file=false;
     int operation;
+
+    char filename_delete[1000]; 
     printf("----------------rm id: %d----------------\n",loop_id++);
     while((ch = fgetc(fp))!=EOF){//!
         if(ch==':'){

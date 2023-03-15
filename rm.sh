@@ -1,6 +1,6 @@
 LOG_DIR=log
 BUILD_DIR=build
-
+DEL_DIR=deletedLog
 if ! [ -d "$LOG_DIR" ]; then 
     mkdir log 
 fi
@@ -18,10 +18,19 @@ cmake ..
 make
 cp rm_tool ../rm_tool
 cd ..
+
+
 ./rm_tool
 
+
 echo ---Starting to delete unused code---
+
 ./deleteList.sh
-mkdir deletedLog
+
+
+if ! [ -d "$DEL_DIR" ]; then 
+    mkdir deletedLog
+fi
+
 mv deleteList.sh ./deletedLog/deleteList_`date +%Y_%m_%d_%H-%M-%S`.log
 echo ------Deleting unused code Done!------
