@@ -31,6 +31,6 @@ echo ---Starting to delete unused code---
 if ! [ -d "$DEL_DIR" ]; then 
     mkdir deletedLog
 fi
-
+mv searchLog/search_res.log  searchLog/searchList_`date +%Y_%m_%d_%H-%M-%S`.log
 mv deleteList.sh ./deletedLog/deleteList_`date +%Y_%m_%d_%H-%M-%S`.log
 echo ------Deleting unused code Done!------

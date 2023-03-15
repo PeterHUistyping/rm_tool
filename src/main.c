@@ -151,7 +151,7 @@ void openfile_check(FILE *fp){
 }
 int main(){
     printf("------WELCOME to USE rm_tool 2023!------\n");   
-    FILE * fp_search= fopen("./log/search_res.log","r");
+    FILE * fp_search= fopen("./searchLog/searchList.log","r");
     FILE * fp_deleteList = fopen ("deleteList.sh", "w+");
     openfile_check(fp_search);
     openfile_check(fp_deleteList);
