@@ -130,19 +130,34 @@ void process_search_log(FILE *fp){
     printf("Max_len: %d \n",max_len);
     rewind(fp);
 }
-
-int main(){
-    FILE *fp;
-    fp= fopen("./log/search_res.log","r");
-    printf("------WELCOME to USE rm_tool 2023!------\n");   
+void open_search(FILE *fp){
+     fp= fopen("./log/search_res.log","r");
+     if(fp == NULL)
+    {
+      printf("Error when opening the file!\n");   
+      exit(1);             
+    }
+}
+void open_deleteList(FILE *fp){
+    fp = fopen ("deleteList.sh", "w+");
     if(fp == NULL)
     {
       printf("Error when opening the file!\n");   
       exit(1);             
     }
-    file_data(fp);
-    process_search_log(fp);
-    fclose(fp);  
-    print_deleteList();
+    fprintf(fp, "# The below shell commands will be run by linux bash and stored as log.\n");
+}
+int main(){
+    FILE *fp_search;
+    FILE * fp_deleteList;
+    printf("------WELCOME to USE rm_tool 2023!------\n");   
+    open_search(fp_search);
+    open_deleteList(fp_deleteList);
+
+    file_data(fp_search);
+    process_search_log(fp_search);
+    fclose(fp_search);  
+    fclose(fp_deleteList);
+    // print_deleteList();
    return(0);
 }
