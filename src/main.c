@@ -57,27 +57,27 @@ void switch_input(FILE *fp_d, int* line_delta){
                 printf("\033[0m\n"); //black
                 break;
             }    
-            if (operation==2){
+            else if (operation==2){
                 printf("\033[31m[DELETE single line] Well received!\n"); //red
                 printf("\033[0m\n");//black
                 print_singledeleteList(fp_d,line_int-*line_delta);
                 *line_delta+=1;
                 break;
             }    
-            if (operation==3){
+            else if (operation==3){
                 printf("\033[32m[Vim] Well received!\n"); //red
                 printf("\033[0m\n");//black
                 print_singledeleteList(fp_d,line_int-*line_delta);
                 *line_delta+=1;
                 break;
             }    
-            if (operation==0){
+            else if (operation==0){
                 printf("\033[32m[EXIT] Well received!\n"); //green
                 printf("\033[0m\n");//black
                 exit_loop=true;
                 break;
             }    
-            else if(operation> max_operation  && operation<0){
+            else if(operation> max_operation || operation<0){
                 printf("\033[33mFailure, Invalid input %d ! Please retry or exit. ",operation); //yellow
                 printf("\033[0m\n");//black
                 continue;

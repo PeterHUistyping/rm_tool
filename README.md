@@ -1,5 +1,6 @@
 # rm_tool Linxu
 Integration of search, view and delete using ack, vim and sed.
+![del_single](./del_single.png)
 ## Pipeline
 ack > search_res.log
 
@@ -13,5 +14,7 @@ sed -i '1,2d' 'test/fops.c'
 generate deletedLog with timestamp.
 
 ## Choice：
-1. rm function
-2. rm variable/single line
+
+1. rm variable/single line
+2. rm specific lines
+3. rm function
