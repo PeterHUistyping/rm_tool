@@ -35,10 +35,8 @@ void RayCasting(SceneParser &parser, int width, int height, char *output_file, f
     Vec2f Point;
     Vec2f p;
     int flag = 0; // debug
-    float pixel = 1024;
 
     float i = 0.25 * pixel, j = 0.23 * pixel; // debugging
-    p.Set(i / pixel, j / pixel);
     Hit h;
     if (parser.getGroup()->intersect(parser.getCamera()->generateRay(p), h, parser.getCamera()->getTMin()))
     {

@@ -51,25 +51,25 @@ void switch_input(FILE *fp_d, int* line_delta){
             printf("     INPUT[0-2]:"); 
             scanf("%d",&operation);
             if (operation == 1){
-                printf("\033[32m[SKIP] Valid input, well received!\n"); //green
+                printf("\033[32m[SKIP] Well received!\n"); //green
                 printf("\033[0m\n"); //black
                 break;
             }    
             if (operation==2){
-                printf("\033[31m[DELETE single line] Valid input, well received!\n"); //red
+                printf("\033[31m[DELETE single line] Well received!\n"); //red
                 printf("\033[0m\n");//black
                 print_singledeleteList(fp_d,line_int-*line_delta);
                 *line_delta+=1;
                 break;
             }    
             if (operation==0){
-                printf("\033[32m[EXIT] Valid input, well received!\n"); //green
+                printf("\033[32m[EXIT] Well received!\n"); //green
                 printf("\033[0m\n");//black
                 exit_loop=true;
                 break;
             }    
             else if(operation != 2 && operation!=1 && operation!=0){
-                printf("\033[33mFailure, invalid input %d ! Please retry or exit. ",operation); //yellow
+                printf("\033[33mFailure, Invalid input %d ! Please retry or exit. ",operation); //yellow
                 printf("\033[0m\n");//black
                 continue;
             }
@@ -90,7 +90,7 @@ void process_search_log(FILE *fp,FILE *fp_d){
     int line_delta=0;
     char filename_delete[1000]; 
  
-    printf("\033[1m----------------rm id: %d file:%d----------------\n",loop_id++,loop_fileid);
+    printf("\033[1m--------------------------------rm id: %d file:%d--------------------------------\n",loop_id++,loop_fileid);
     printf("\033[0m\n");//black
     while((ch = fgetc(fp))!=EOF){//!
         if(ch==':'){
@@ -157,7 +157,7 @@ void process_search_log(FILE *fp,FILE *fp_d){
             len = 0;
             first_colon=true;
             second_colon=false;
-            printf("\033[1m----------------rm id: %d file:%d----------------\n",loop_id++,loop_fileid);
+            printf("\033[1m--------------------------------rm id: %d file:%d--------------------------------\n",loop_id++,loop_fileid);
             printf("\033[0m\n");//black
         }
     }
