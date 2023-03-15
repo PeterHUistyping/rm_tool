@@ -1,8 +1,9 @@
 LOG_DIR=log
 BUILD_DIR=build
 DEL_DIR=deletedLog
-if ! [ -d "$LOG_DIR" ]; then 
-    mkdir log 
+searchLog_DIR=searchLog
+if ! [ -d "$searchLog_DIR" ]; then 
+    mkdir searchLog 
 fi
 
 ack pixel ./test  

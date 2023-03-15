@@ -98,24 +98,29 @@ void process_search_log(FILE *fp,FILE *fp_d){
                 second_colon=false;
                 same_file=false;
                 while( 1 ){
-                    printf("Please enter your operation choice: 2 for [DELETE] and 1 for [NOT]. 0 for[exit] \n");    
+                    printf("\033[1mPlease enter your operation choice: 2 for [DELETE] and 1 for [NOT]. 0 for[exit]");    //bold
+                    printf("\033[0m\n");//black
                     scanf("%d",&operation);
                     if (operation == 1){
-                        printf("[NOT] Valid input, well received!\n");
+                        printf("\033[32m[NOT] Valid input, well received!"); //green
+                        printf("\033[0m\n"); //black
                         break;
                     }    
                     if (operation==2){
-                        printf("[DELETE] Valid input, well received!\n");
+                        printf("\033[31m[DELETE] Valid input, well received!"); //red
+                        printf("\033[0m\n");//black
                         print_singledeleteList(fp_d,line_int);
                         break;
                     }    
                     if (operation==0){
-                        printf("[EXIT] Valid input, well received!\n");
+                        printf("\033[32m[EXIT] Valid input, well received!"); //green
+                        printf("\033[0m\n");//black
                         exit=true;
                         break;
                     }    
                     else if(operation != 2 && operation!=1 && operation!=0){
-                        printf("Failure, invalid input %d\n",operation);
+                        printf("\033[33mFailure, invalid input %d",operation); //yellow
+                        printf("\033[0m\n");//black
                         continue;
                     }
                 }   
