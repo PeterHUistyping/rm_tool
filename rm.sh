@@ -24,9 +24,10 @@ echo ------ Start to build the rm_tool needed ------
 cmake ..
 make
 cd ..
-
-
+ack pixel ../test
 ./build/rm_tool
+ 
+
 
 
 echo ---Starting to delete unused code---

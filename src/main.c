@@ -20,8 +20,9 @@ enum op {
     delete_single,
     vim,
     delete_multiple,
+    ack,
     First = exit_switch,
-    Last = delete_multiple,
+    Last = ack,
     
 };
 void openfile_check(FILE *fp){
@@ -81,17 +82,19 @@ void acknowledge(){
     }
     
 }
-void flush_delete(FILE *fp,FILE *fp_d){
+void flush_delete(FILE *fp,FILE *fp_d,int* line_delta){
     acknowledge();
     fflush(fp_d);
     fflush(fp);
-    fp=freopen("","w",fp);
+    
     system("bash deleteList.sh");  
-    system("> deleteList.sh");  
+    system("echo # flushed > deleteList.sh");  
     system("> searchLog/searchList.log");    
-    system("ack pixel ../test > ./searchLog/searchList.log");    
-    system("echo Flushed!");    
-       
+    system("ack pixel ../test > ./searchLog/searchList.log");   
+    *line_delta=0;
+    system("echo Flushed!");  
+    // fp=freopen("","w",fp);  
+    rewind(fp);   
     //execl("/usr/bin/bash","/usr/bin/bash","deleteList.sh",NULL);
     //execl("/usr/bin/echo","/usr/bin/echo","Hi",NULL);  
     
@@ -110,7 +113,8 @@ void switch_input(FILE *fp,FILE *fp_d, int* line_delta){
             printf("%d [SKIP this line]\n",skip); 
             printf("%d [DELETE single line]\n",delete_single); 
             printf("%d [Vim]\n",vim);
-            printf("%d [DELETE Mul lines]",delete_multiple);
+            printf("%d [DELETE Mul lines]\n",delete_multiple);
+            printf("%d [ack search]",ack);
             printf("     INPUT[0-%d]:",Last); 
             scanf("%d",&operation);
             switch (operation) { 
@@ -122,11 +126,9 @@ void switch_input(FILE *fp,FILE *fp_d, int* line_delta){
                     printf("\033[1mPlease enter the last line for deletion:");
                     printf("\033[0m\n");//black
                     scanf("%d",&end_line);
-
-                    flush_delete(fp,fp_d);
-                   
-                    *line_delta=0;
                     print_deleteList(fp_deleteLog,st_line,end_line);
+                    print_deleteList(fp_d,st_line,end_line);
+                    flush_delete(fp,fp_d,line_delta);
                     break;
                 case exit_switch:
                     printf("\033[32m[EXIT and Flush] Well received!\n"); //green
@@ -149,31 +151,37 @@ void switch_input(FILE *fp,FILE *fp_d, int* line_delta){
                     printf("\033[0m\n");//black
                     
                     int status;
-                    flush_delete(fp,fp_d);
-                    pid_t childPid = fork();
-                    if (childPid) {
-                    }
-                    else {
-                        wait(&status);          
-                        char filename_current_full[buffer_size]; 
-                        filename_current_full[0]='.'; 
-                        filename_current_full[1]='.'; 
-                        filename_current_full[2]='/'; 
-                        filename_current_full[3]='\0'; 
-                        strcat(filename_current_full, filename_last);
-                        char* path = filename_current_full;
-                        char lines_temp[buffer_size]="+"; 
-                        strcat(lines_temp, current_line_num);
-                        char * lines_ = lines_temp;
-                        
-                        execl("/usr/bin/vim","/usr/bin/vim",lines_,path,NULL);      
-                    }
+                    flush_delete(fp,fp_d,line_delta);
+                    //pid_t childPid = fork();
+                    //if (childPid) {
+                    //}
+                    //else {
+                    //    wait(&status);          
+                        // char filename_current_full[buffer_size]; 
+                        // filename_current_full[0]='.'; 
+                        // filename_current_full[1]='.'; 
+                        // filename_current_full[2]='/'; 
+                        // filename_current_full[3]='\0'; 
+                        // strcat(filename_current_full, filename_last);
+                        // char* path = filename_current_full;
+                    char* path = filename_last;
+                    char lines_temp[buffer_size]="vim +"; 
+                    strcat(lines_temp, current_line_num);
+                    strcat(lines_temp, " ");
+                    strcat(lines_temp,filename_last );
+                    char * cmd = lines_temp;
+                    system(cmd);  
+                        //execl("/usr/bin/vim","/usr/bin/vim",lines_,path,NULL);      
+                    //}
+                    break;
+                 case ack:
+                    system("ack pixel ../test ");    
                     break;
                 default:
                     printf("\033[33mFailure, Invalid input: %d! Please retry or exit. ",operation); //yellow
                     printf("\033[0m\n");//black
             }
-            if(operation > Last || operation<First || operation== vim || operation==delete_multiple){
+            if(operation > Last || operation<First || operation== vim || operation==ack || operation==delete_multiple){
                 continue;
             }
             else{
@@ -250,9 +258,6 @@ void process_search_log(FILE *fp,FILE *fp_d){
             }
  
         }
-        if(exit_loop){
-            break;
-        }
         current_line[len]=ch;
         ++len;
         if(ch == '\n'){
@@ -260,6 +265,7 @@ void process_search_log(FILE *fp,FILE *fp_d){
                 printf("%c",current_line[i]);
             }  
             printf("\n");
+          
             switch_input(fp,fp_d, & line_delta);
 
             if(max_len < len)
@@ -268,14 +274,20 @@ void process_search_log(FILE *fp,FILE *fp_d){
             len = 0;
             first_colon=true;
             second_colon=false;
+            if(exit_loop){
+                printf("Exit loop!\n");
+                break;
+            }
             printf("\033[1m--------------------------------rm id: %d file:%d--------------------------------\n",loop_id++,loop_fileid);
             printf("\033[0m\n");//black
+            memset( current_line, '\0', sizeof(current_line) );                
         }
     }
     if(len)
         ++lines;
-    printf("Lines of the file: %d \n",lines);
-    printf("Max_len: %d \n",max_len);
+    
+    printf("Max_len of the a line is %d \n",max_len);
+    printf("Review %d searches\n",lines);
     rewind(fp);
 }
 
@@ -285,7 +297,7 @@ int main(){
     struct tm *timenow;
     time_t now = time(NULL);
     timenow = gmtime(&now);
-    printf("------WELCOME to USE rm_tool 2023!------\n");   
+    printf("\n\n\n\n\n\n\n\n\n\n --- ****** --- WELCOME to USE rm_tool 2023:) --- ****** ---\n");   
 
     strftime(temp, sizeof(temp), "deletedLog/deleteList_%Y-%m-%d_%H-%M-%S.log", timenow);  
     char *path = temp;
@@ -297,8 +309,8 @@ int main(){
     openfile_check(fp_search);
     openfile_check(fp_deleteList);
     openfile_check(fp_deleteLog);
-    fprintf(fp_deleteList, "# The below shell commands will be run by linux bash and stored as log.\n The line is calculated after each deletion.\n");
-    fprintf(fp_deleteLog, "# The below shell commands will be run by linux bash and stored as log.\n The line is calculated after each deletion.\n");
+    fprintf(fp_deleteList, "# The below shell commands will be run by linux bash and stored as log.\n# The line is calculated after each deletion.\n");
+    fprintf(fp_deleteLog, "# The below shell commands will be run by linux bash and stored as log.\n# The line is calculated after each deletion.\n");
    
 
     file_data(fp_search);

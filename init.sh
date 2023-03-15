@@ -6,3 +6,4 @@ sudo apt install vim -y
 echo Install done!
 ./test/reset_test.sh
 ./change_r.sh
+cp -r test ../
