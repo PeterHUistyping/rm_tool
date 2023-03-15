@@ -5,33 +5,35 @@ searchLog_DIR=searchLog
 if ! [ -d "$searchLog_DIR" ]; then 
     mkdir searchLog 
 fi
+while :
+do
+    ack pixel ./test  
+    ack pixel ./test > ./searchLog/searchList.log
 
-ack pixel ./test  
-ack pixel ./test > ./searchLog/searchList.log
+    echo ------ rm the previous build  ------
+    rm -rf build
+    mkdir build
+    cd build
 
-echo ------ rm the previous build  ------
-rm -rf build
-mkdir build
-cd build
-
-echo ------ Start to build the rm_tool needed ------
-cmake ..
-make
-cp rm_tool ../rm_tool
-cd ..
-
-
-./rm_tool
+    echo ------ Start to build the rm_tool needed ------
+    cmake ..
+    make
+    cp rm_tool ../rm_tool
+    cd ..
 
 
-echo ---Starting to delete unused code---
-
-./deleteList.sh
+    ./rm_tool
 
 
-if ! [ -d "$DEL_DIR" ]; then 
-    mkdir deletedLog
-fi
-mv searchLog/searchList.log  searchLog/searchList_`date +%Y_%m_%d_%H-%M-%S`.log
-mv deleteList.sh ./deletedLog/deleteList_`date +%Y_%m_%d_%H-%M-%S`.log
-echo ------Deleting unused code Done!------
+    echo ---Starting to delete unused code---
+
+    ./deleteList.sh
+
+
+    if ! [ -d "$DEL_DIR" ]; then 
+        mkdir deletedLog
+    fi
+    mv searchLog/searchList.log  searchLog/searchList_`date +%Y_%m_%d_%H-%M-%S`.log
+    mv deleteList.sh ./deletedLog/deleteList_`date +%Y_%m_%d_%H-%M-%S`.log
+    echo ------Deleting unused code Done!------
+done

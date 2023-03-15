@@ -10,6 +10,16 @@ char current_line_num[buffer_size];
 int first_colon_len=0;
 int line_int=0;
 bool exit_loop=false;
+enum op {
+    exit_switch,
+    skip,
+    delete_single,
+    vim,
+    delete_multiple,
+    First = exit_switch,
+    Last = delete_multiple,
+    
+};
 void file_data(FILE *fp){
     int lines = 0; // lines of the file
     int ch = 0;
@@ -47,26 +57,48 @@ void print_deleteList(FILE *fp,int st_line, int end_line){
 }
 void switch_input(FILE *fp_d, int* line_delta){
         int operation=0;
-        int max_operation=3;
+        int st_line,end_line;
         while( 1 ){
             printf("\033[1mPlease enter your operation choice:  ");    //bold
             printf("\033[0m\n");//black
-            printf("0 for [exit]; 1 for [SKIP]\n2 for [DELETE single line]\n"); 
-            printf("3 for [Vim]");
-            printf("     INPUT[0-%d]:",max_operation); 
+            printf("%d for [EXIT and Flush];\n",exit_switch); 
+            printf("%d for [SKIP this line]\n",skip); 
+            printf("%d for [DELETE single line]\n",delete_single); 
+            printf("%d for [Vim]\n",vim);
+            printf("%d for [DELETE Mul lines]",delete_multiple);
+            printf("     INPUT[0-%d]:",Last); 
             scanf("%d",&operation);
             switch (operation) { 
-                case 1: 
+                case delete_multiple: 
+                    printf("\033[31m[DELETE Mul lines] Well received!\n"); //red
+                    printf("\033[0m\n");//black
+                    printf("\033[1mPlease enter the start line for deletion:\n");
+                    scanf("%d",&st_line);
+                    printf("\033[1mPlease enter the last line for deletion:");
+                    printf("\033[0m\n");//black
+                    scanf("%d",&end_line);
+                    *line_delta+=(end_line-st_line+1);
+                    printf("\033[32mDelete multiple lines is asynchronous, flushing and reloading by design!\n"); //green
+                    printf("\033[0m\n");//black
+                    printf("Please wait until the program is reloading and processing the deletion thanks! \nInput ANY character to confirm acknowledge: ");//black
+                    char temp[buffer_size];
+                    scanf("%s",temp);
+                case exit_switch:
+                    printf("\033[32m[EXIT and Flush] Well received!\n"); //green
+                    printf("\033[0m\n");//black
+                    exit_loop=true;
+                    break;
+                case skip: 
                     printf("\033[32m[SKIP] Well received!\n"); //green
                     printf("\033[0m\n"); //black
                     break;
-                case 2:
+                case delete_single:
                     printf("\033[31m[DELETE single line] Well received!\n"); //red
                     printf("\033[0m\n");//black
                     print_singledeleteList(fp_d,line_int-*line_delta);
                     *line_delta+=1;
                     break;
-                case 3:
+                case vim:
                     printf("\033[32m[Vim] Well received!\n"); //red
                     printf("\033[0m\n");//black
                     pid_t childPid = fork();
@@ -81,22 +113,13 @@ void switch_input(FILE *fp_d, int* line_delta){
                         strcat(lines_temp, current_line_num);
                         char * lines_ = lines_temp;
                         execl("/usr/bin/vim","/usr/bin/vim",lines_,path,NULL);         
-                        
                     }
-                  
-                    print_singledeleteList(fp_d,line_int-*line_delta);
-                    *line_delta+=1;
-                    break;
-                case 0:
-                printf("\033[32m[EXIT] Well received!\n"); //green
-                    printf("\033[0m\n");//black
-                    exit_loop=true;
                     break;
                 default:
                     printf("\033[33mFailure, Invalid input: %d! Please retry or exit. ",operation); //yellow
                     printf("\033[0m\n");//black
             }
-            if(operation > max_operation || operation<0 || operation==3){
+            if(operation > Last || operation<First || operation== vim){
                 continue;
             }
             else{

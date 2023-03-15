@@ -1,6 +1,7 @@
 # rm_tool Linxu
 Integration of search, view and delete using Linux System Call ack, vim and sed.
 ![del_single](./del_single.png)
+Make use of enum, switch, file handling in C, system call.
 ## Pipeline
 ack > search_res.log
 
@@ -18,5 +19,5 @@ generate deletedLog with timestamp.
 2. rm variable/single line
 3. vim
 4. rm specific lines
+    Delete Multiple Lines is asynchronous, it will trigger flush and reload by design
 5. rm function
-6. 
