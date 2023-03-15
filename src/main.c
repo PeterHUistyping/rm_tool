@@ -12,6 +12,7 @@ char current_line_num[buffer_size];
 int first_colon_len=0;
 int line_int=0;
 bool exit_loop=false;
+FILE *fp_deleteLog;
 enum op {
     exit_switch,
     skip,
@@ -64,45 +65,33 @@ void print_deleteList(FILE *fp,int st_line, int end_line){
     }
     fprintf(fp,"\n");
 }
-void flush_delete(FILE *fp,FILE *fp_d){
-         printf("2")      ;
+void acknowledge(){
+    printf("\033[32mDelete multiple lines is asynchronous, flushing and reloading by design!\n"); //green
+    printf("\033[0mPlease wait until the program is reloading and processing the deletion, thanks! \nInput ANY character to confirm acknowledge: ");//black
     char temp[buffer_size];
-    struct tm *timenow;
-    time_t now = time(NULL);
-    timenow = gmtime(&now);
-   
-    
+    scanf("%s",temp);
+}
+void flush_delete(FILE *fp,FILE *fp_d){
+    acknowledge();
     fflush(fp_d);
     fflush(fp);
-    // fclose(fp_d);
-    // fclose(fp);
- 
-    pid_t childPid = fork();
-    int status;
-    flush_delete(fp,fp_d);
-        printf("1")      ;
-    execl("/usr/bin/bash","/usr/bin/bash","deleteList.sh",NULL);
-        
-    
-    //
-    // strftime(temp, sizeof(temp), "searchLog/searchList_%Y-%m-%d_%H-%M-%S.log", timenow);
-    // char *path = temp;
-    // execl("/usr/bin/cp","/usr/bin/cp","searchLog/searchList.log",path,NULL);    
-    // strftime(temp, sizeof(temp), "deletedLog/deleteList_%Y-%m-%d_%H-%M-%S.log", timenow);  
-    // path = temp; 
-    // execl("/usr/bin/cp","/usr/bin/cp","deleteList.sh",path,NULL);
-    //  printf("1")      ;
-    // fp_d = fopen ("deleteList.sh", "w+");
-    // fp= fopen("./searchLog/searchList.log","r");
-    // openfile_check(fp);
-    // openfile_check(fp_d);
-    // fprintf(fp, "# The below shell commands will be run by linux bash and stored as log.\n");
-    // execl("/usr/bin/ack","/usr/bin/ack","pixel ./test > searchLog/searchList.log",NULL);
+    fp=freopen("","w",fp);
+    system("./deleteList.sh");  
+    system("> deleteList.sh");  
+    system("> searchLog/searchList.log");    
+    system("ack pixel ./test > ./searchLog/searchList.log");    
+    system("echo Flushed!");    
 
+    int status;
+   
+    //execl("/usr/bin/bash","/usr/bin/bash","deleteList.sh",NULL);
+    //execl("/usr/bin/echo","/usr/bin/echo","Hi",NULL);  
+    
+    // strftime(temp, sizeof(temp), "deletedLog/deleteList_%Y-%m-%d_%H-%M-%S.log", timenow);  
+    // char *path = temp; 
+    // execl("/usr/bin/cp","/usr/bin/cp","deleteList.sh",path,NULL)
 }
-void test(){
-    execl("/usr/bin/bash","/usr/bin/bash","deleteList.sh",NULL);
-}
+ 
 void switch_input(FILE *fp,FILE *fp_d, int* line_delta){
         int operation=0;
         int st_line,end_line;
@@ -126,14 +115,10 @@ void switch_input(FILE *fp,FILE *fp_d, int* line_delta){
                     printf("\033[0m\n");//black
                     scanf("%d",&end_line);
 
-                    printf("\033[32mDelete multiple lines is asynchronous, flushing and reloading by design!\n"); //green
-                    printf("\033[0m\n");//black
-                    printf("Please wait until the program is reloading and processing the deletion thanks! \nInput ANY character to confirm acknowledge: ");//black
-                    char temp[buffer_size];
-                    scanf("%s",temp);
+                    flush_delete(fp,fp_d);
                    
                     *line_delta=0;
-                    print_deleteList(fp_d,st_line,end_line);
+                    print_deleteList(fp_deleteLog,st_line,end_line);
                     
                 case exit_switch:
                     printf("\033[32m[EXIT and Flush] Well received!\n"); //green
@@ -148,35 +133,35 @@ void switch_input(FILE *fp,FILE *fp_d, int* line_delta){
                     printf("\033[31m[DELETE single line] Well received!\n"); //red
                     printf("\033[0m\n");//black
                     print_singledeleteList(fp_d,line_int-*line_delta);
+                    print_singledeleteList(fp_deleteLog,line_int-*line_delta);
                     *line_delta+=1;
                     break;
                 case vim:
                     printf("\033[32m[Vim] Well received!\n"); //red
                     printf("\033[0m\n");//black
-                    pid_t childPid = fork();
+                    
                     int status;
-                    //flush_delete(fp,fp_d);
-                     test();
-                        printf("1")      ;
+                    flush_delete(fp,fp_d);
+                    pid_t childPid = fork();
                     if (childPid) {
-                        
+                        printf("child")      ;
+                       
                     }
                     else {
-                        // wait(&status);
-                        //  printf("2")      ;
+                        wait(&status);
+                         printf("father")      ;
                         
-                        // char filename_current_full[buffer_size]; 
-                        // filename_current_full[0]='.'; 
-                        // filename_current_full[1]='/'; 
-                        // filename_current_full[2]='\0'; 
-                        // strcat(filename_current_full, filename_last);
-                        // char* path = filename_current_full;
-                        // char lines_temp[buffer_size]="+"; 
-                        // strcat(lines_temp, current_line_num);
-                        // char * lines_ = lines_temp;
+                        char filename_current_full[buffer_size]; 
+                        filename_current_full[0]='.'; 
+                        filename_current_full[1]='/'; 
+                        filename_current_full[2]='\0'; 
+                        strcat(filename_current_full, filename_last);
+                        char* path = filename_current_full;
+                        char lines_temp[buffer_size]="+"; 
+                        strcat(lines_temp, current_line_num);
+                        char * lines_ = lines_temp;
                         
-                        // execl("/usr/bin/vim","/usr/bin/vim",lines_,path,NULL);  
-                        execl("/usr/bin/echo","/usr/bin/echo","Hi",NULL);       
+                        execl("/usr/bin/vim","/usr/bin/vim",lines_,path,NULL);      
                     }
                     break;
                 default:
@@ -291,17 +276,31 @@ void process_search_log(FILE *fp,FILE *fp_d){
 
 
 int main(){
+    char temp[buffer_size];
+    struct tm *timenow;
+    time_t now = time(NULL);
+    timenow = gmtime(&now);
     printf("------WELCOME to USE rm_tool 2023!------\n");   
-    FILE * fp_search= fopen("./searchLog/searchList.log","r");
+
+    strftime(temp, sizeof(temp), "deletedLog/deleteList_%Y-%m-%d_%H-%M-%S.log", timenow);  
+    char *path = temp;
+    fp_deleteLog= fopen(path,"w");
+
+    
+    FILE * fp_search= fopen("searchLog/searchList.log","r+");
     FILE * fp_deleteList = fopen ("deleteList.sh", "w+");
     openfile_check(fp_search);
     openfile_check(fp_deleteList);
+    openfile_check(fp_deleteLog);
     fprintf(fp_deleteList, "# The below shell commands will be run by linux bash and stored as log.\n");
+    fprintf(fp_deleteLog, "# The below shell commands will be run by linux bash and stored as log.\n");
+   
 
     file_data(fp_search);
     process_search_log(fp_search,fp_deleteList);
     fclose(fp_search);  
     fclose(fp_deleteList);
-    // print_deleteList();
-   return(0);
+    fclose(fp_deleteLog);
+ 
+    return(0);
 }
