@@ -1,4 +1,5 @@
-# rm_tool
+# rm_tool Linxu
+Integration of search, view and delete using ack, vim and sed.
 ## Pipeline
 ack > search_res.log
 

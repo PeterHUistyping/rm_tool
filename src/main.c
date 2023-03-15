@@ -44,10 +44,12 @@ void print_deleteList(FILE *fp,int st_line, int end_line){
 }
 void switch_input(FILE *fp_d, int* line_delta){
         int operation=0;
+        int max_operation=3;
         while( 1 ){
             printf("\033[1mPlease enter your operation choice:  ");    //bold
             printf("\033[0m\n");//black
-            printf("0 for [exit]; 1 for [SKIP]\n2 for [DELETE single line]     INPUT[0-2]:"); 
+            printf("0 for [exit]; 1 for [SKIP]\n2 for [DELETE single line]\n"); 
+            printf("3 for [Vim]");
             printf("     INPUT[0-2]:"); 
             scanf("%d",&operation);
             if (operation == 1){
@@ -62,13 +64,20 @@ void switch_input(FILE *fp_d, int* line_delta){
                 *line_delta+=1;
                 break;
             }    
+            if (operation==3){
+                printf("\033[32m[Vim] Well received!\n"); //red
+                printf("\033[0m\n");//black
+                print_singledeleteList(fp_d,line_int-*line_delta);
+                *line_delta+=1;
+                break;
+            }    
             if (operation==0){
                 printf("\033[32m[EXIT] Well received!\n"); //green
                 printf("\033[0m\n");//black
                 exit_loop=true;
                 break;
             }    
-            else if(operation != 2 && operation!=1 && operation!=0){
+            else if(operation> max_operation  && operation<0){
                 printf("\033[33mFailure, Invalid input %d ! Please retry or exit. ",operation); //yellow
                 printf("\033[0m\n");//black
                 continue;
