@@ -89,8 +89,10 @@ void process_search_log(FILE *fp,FILE *fp_d){
             }
             else if(second_colon){
                 printf("line: |");
+                int line_int=0;
                 for(int i=first_colon_len;i<len;i++){
-                    printf("%c",filename[i]);
+                    line_int=line_int*10+filename[i]-'0';
+                    printf("%c %d",filename[i],line_int);
                 }     
                 printf("| (range of len: %d-%d), \n \n",first_colon_len,len);
                 second_colon=false;
@@ -104,7 +106,7 @@ void process_search_log(FILE *fp,FILE *fp_d){
                     }    
                     if (operation==2){
                         printf("[DELETE] Valid input, well received!\n");
-                        print_singledeleteList(fp_d,1);
+                        print_singledeleteList(fp_d,line_int);
                         break;
                     }    
                     if (operation==0){

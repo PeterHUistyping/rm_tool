@@ -1,3 +1,23 @@
+test/backup/hello.c:38:    float pixel = 1024;
+test/backup/hello.c:40:    float i = 0.25 * pixel, j = 0.23 * pixel; // debugging
+test/backup/hello.c:41:    p.Set(i / pixel, j / pixel);
+test/backup/hello.c:46:        image.SetPixel(width * i / pixel, height * j / pixel, h.getMaterial()->getDiffuseColor());
+test/backup/hello.c:48:            imageDepth.SetPixel(width * i / pixel, height * j / pixel, h.getMaterial()->getDiffuseColor());
+test/backup/hello.c:51:    for (float i = 0; i < pixel; i++) // load the camera (0,0)->(1,1) 64*64 Generate Points on the sceen coordinate
+test/backup/hello.c:53:        for (float j = 0; j < pixel; j++)
+test/backup/hello.c:55:            p.Set(i / pixel, j / pixel); // Ray - generateRay(p)  //~Camera
+test/backup/hello.c:59:                image.SetPixel(width * i / pixel, height * j / pixel, h.getMaterial()->getDiffuseColor());
+test/backup/hello.c:73:                imageDepth.SetPixel(width * i / pixel, height * j / pixel, color);
+test/backup/hello.c:89:    float pixel = 1024;
+test/backup/hello.c:91:    for (float i = 0; i < pixel; i++)
+test/backup/hello.c:93:        for (float j = 0; j < pixel; j++)
+test/backup/hello.c:96:            p.Set(i / pixel, j / pixel); // Ray - generateRay(p)  //~Camera
+test/backup/hello.c:107:                imageNormal.SetPixel(width * i / pixel, height * j / pixel, Normalabs);
+test/backup/hello.c:120:    float pixel = 1024;
+test/backup/hello.c:125:    for (float i = 0; i < pixel; i++)
+test/backup/hello.c:127:        for (float j = 0; j < pixel; j++)
+test/backup/hello.c:129:            p.Set(i / pixel, j / pixel); // Ray - generateRay(p)  //~Camera
+test/backup/hello.c:157:                image.SetPixel(width * i / pixel, height * j / pixel, pcolor);
 test/hello.c:38:    float pixel = 1024;
 test/hello.c:40:    float i = 0.25 * pixel, j = 0.23 * pixel; // debugging
 test/hello.c:41:    p.Set(i / pixel, j / pixel);
