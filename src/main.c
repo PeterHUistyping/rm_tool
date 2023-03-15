@@ -54,8 +54,8 @@ void process_search_log(FILE *fp,FILE *fp_d){
     bool first_hit_colon=true;
     bool exit=false;
     bool same_file=false;
-    int operation;
-
+    int operation=0;
+    int line_delta=0;
     char filename_delete[1000]; 
     printf("----------------rm id: %d----------------\n",loop_id++);
     while((ch = fgetc(fp))!=EOF){//!
@@ -66,6 +66,9 @@ void process_search_log(FILE *fp,FILE *fp_d){
                    if(strncmp(filename, filename_last, len) == 0){
                         same_file=true;
                         // printf("%d,%d",first_hit_colon,same_file); //debug
+                    }
+                    else{//new file
+                        line_delta=0;
                     }
                 }
                 else{
@@ -85,14 +88,14 @@ void process_search_log(FILE *fp,FILE *fp_d){
                 first_colon_len++;
                 first_colon=false;
                 second_colon=true;
-                 
             }
             else if(second_colon){
                 printf("line: |");
                 int line_int=0;
                 for(int i=first_colon_len;i<len;i++){
                     line_int=line_int*10+filename[i]-'0';
-                    printf("%c %d",filename[i],line_int);
+                    printf("%c",filename[i]);
+                    printf(" %d",line_int);
                 }     
                 printf("| (range of len: %d-%d), \n \n",first_colon_len,len);
                 second_colon=false;
@@ -102,18 +105,19 @@ void process_search_log(FILE *fp,FILE *fp_d){
                     printf("\033[0m\n");//black
                     scanf("%d",&operation);
                     if (operation == 1){
-                        printf("\033[32m[NOT] Valid input, well received!"); //green
+                        printf("\033[32m[NOT] Valid input, well received!\n"); //green
                         printf("\033[0m\n"); //black
                         break;
                     }    
                     if (operation==2){
-                        printf("\033[31m[DELETE] Valid input, well received!"); //red
+                        printf("\033[31m[DELETE] Valid input, well received!\n"); //red
                         printf("\033[0m\n");//black
-                        print_singledeleteList(fp_d,line_int);
+                        print_singledeleteList(fp_d,line_int-line_delta);
+                        line_delta+=1;
                         break;
                     }    
                     if (operation==0){
-                        printf("\033[32m[EXIT] Valid input, well received!"); //green
+                        printf("\033[32m[EXIT] Valid input, well received!\n"); //green
                         printf("\033[0m\n");//black
                         exit=true;
                         break;
