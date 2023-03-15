@@ -2,8 +2,10 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 char current_line[1000]; // search_res.log
 char filename_last[1000];
+char filename_current[1000]; 
 int first_colon_len=0;
 int line_int=0;
 bool exit_loop=false;
@@ -50,37 +52,40 @@ void switch_input(FILE *fp_d, int* line_delta){
             printf("\033[0m\n");//black
             printf("0 for [exit]; 1 for [SKIP]\n2 for [DELETE single line]\n"); 
             printf("3 for [Vim]");
-            printf("     INPUT[0-2]:"); 
+            printf("     INPUT[0-%d]:",max_operation); 
             scanf("%d",&operation);
-            if (operation == 1){
-                printf("\033[32m[SKIP] Well received!\n"); //green
-                printf("\033[0m\n"); //black
-                break;
-            }    
-            else if (operation==2){
-                printf("\033[31m[DELETE single line] Well received!\n"); //red
-                printf("\033[0m\n");//black
-                print_singledeleteList(fp_d,line_int-*line_delta);
-                *line_delta+=1;
-                break;
-            }    
-            else if (operation==3){
-                printf("\033[32m[Vim] Well received!\n"); //red
-                printf("\033[0m\n");//black
-                print_singledeleteList(fp_d,line_int-*line_delta);
-                *line_delta+=1;
-                break;
-            }    
-            else if (operation==0){
+            switch (operation) { 
+                case 1: 
+                    printf("\033[32m[SKIP] Well received!\n"); //green
+                    printf("\033[0m\n"); //black
+                    break;
+                case 2:
+                    printf("\033[31m[DELETE single line] Well received!\n"); //red
+                    printf("\033[0m\n");//black
+                    print_singledeleteList(fp_d,line_int-*line_delta);
+                    *line_delta+=1;
+                    break;
+                case 3:
+                    printf("\033[32m[Vim] Well received!\n"); //red
+                    printf("\033[0m\n");//black
+                    execl("/usr/bin/vim","/usr/bin/vim","+5","./test/hello.c",NULL);
+                    print_singledeleteList(fp_d,line_int-*line_delta);
+                    *line_delta+=1;
+                    break;
+                case 0:
                 printf("\033[32m[EXIT] Well received!\n"); //green
-                printf("\033[0m\n");//black
-                exit_loop=true;
-                break;
-            }    
-            else if(operation> max_operation || operation<0){
-                printf("\033[33mFailure, Invalid input %d ! Please retry or exit. ",operation); //yellow
-                printf("\033[0m\n");//black
+                    printf("\033[0m\n");//black
+                    exit_loop=true;
+                    break;
+                default:
+                    printf("\033[33mFailure, Invalid input: %d! Please retry or exit. ",operation); //yellow
+                    printf("\033[0m\n");//black
+            }
+            if(operation > max_operation || operation<0){
                 continue;
+            }
+            else{
+                break;
             }
     }   
 }
