@@ -44,6 +44,7 @@ void process_search_log(FILE *fp){
     bool first_colon=true;
     bool second_colon=false;
     bool first_hit_colon=true;
+    bool exit=false;
     int first_colon_len=0;
     bool same_file=false;
     int operation;
@@ -86,7 +87,7 @@ void process_search_log(FILE *fp){
                 second_colon=false;
                 same_file=false;
                 while( 1 ){
-                    printf("Please enter your operation choice: 2 for [DELETE] and 1 for [NOT]. \n");    
+                    printf("Please enter your operation choice: 2 for [DELETE] and 1 for [NOT]. 0 for[exit] \n");    
                     scanf("%d",&operation);
                     if (operation == 1){
                         printf("[NOT] Valid input, well received!\n");
@@ -96,17 +97,21 @@ void process_search_log(FILE *fp){
                         printf("[DELETE] Valid input, well received!\n");
                         break;
                     }    
-                    else if(operation != 2 && operation!=1){
+                    if (operation==0){
+                        printf("[EXIT] Valid input, well received!\n");
+                        exit=true;
+                        break;
+                    }    
+                    else if(operation != 2 && operation!=1 && operation!=0){
                         printf("Failure, invalid input %d\n",operation);
                         continue;
                     }
                 }   
-                      
-               
-
             }
         }
-
+        if(exit){
+            break;
+        }
         filename[len]=ch;
         ++len;
         if(ch == '\n'){
