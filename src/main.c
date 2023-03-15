@@ -3,9 +3,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-char current_line[1000]; // search_res.log
-char filename_last[1000];
-char filename_current[1000]; 
+# define buffer_size 1000
+char current_line[buffer_size]; // search_res.log
+char filename_last[buffer_size]; //current for future use 
+char current_line_num[buffer_size];
 int first_colon_len=0;
 int line_int=0;
 bool exit_loop=false;
@@ -68,7 +69,21 @@ void switch_input(FILE *fp_d, int* line_delta){
                 case 3:
                     printf("\033[32m[Vim] Well received!\n"); //red
                     printf("\033[0m\n");//black
-                    execl("/usr/bin/vim","/usr/bin/vim","+5","./test/hello.c",NULL);
+                    pid_t childPid = fork();
+                    int status;
+                    if (childPid) {      
+                    }
+                    else {
+                        char filename_current_full[buffer_size]="./"; 
+                        strcat(filename_current_full, filename_last);
+                        char * path = filename_current_full;
+                        char lines_temp[buffer_size]="+"; 
+                        strcat(lines_temp, current_line_num);
+                        char * lines_ = lines_temp;
+                        execl("/usr/bin/vim","/usr/bin/vim",lines_,path,NULL);         
+                        
+                    }
+                  
                     print_singledeleteList(fp_d,line_int-*line_delta);
                     *line_delta+=1;
                     break;
@@ -81,7 +96,7 @@ void switch_input(FILE *fp_d, int* line_delta){
                     printf("\033[33mFailure, Invalid input: %d! Please retry or exit. ",operation); //yellow
                     printf("\033[0m\n");//black
             }
-            if(operation > max_operation || operation<0){
+            if(operation > max_operation || operation<0 || operation==3){
                 continue;
             }
             else{
@@ -102,7 +117,7 @@ void process_search_log(FILE *fp,FILE *fp_d){
     bool first_hit_colon=true;
     bool same_file=false;
     int line_delta=0;
-    char filename_delete[1000]; 
+    char filename_delete[buffer_size]; 
  
     printf("\033[1m--------------------------------rm id: %d file:%d--------------------------------\n",loop_id++,loop_fileid);
     printf("\033[0m\n");//black
@@ -125,7 +140,7 @@ void process_search_log(FILE *fp,FILE *fp_d){
                     first_hit_colon=false;
                 }
                 strncpy(filename_last, current_line, len);
-                
+
                 if (first_hit_colon||!same_file){
                     printf("file name: |");
                     for(int i=0;i<len;i++){
@@ -142,16 +157,19 @@ void process_search_log(FILE *fp,FILE *fp_d){
             else if(second_colon){
                 printf("line: |");
                 line_int=0;
+                int temp_i=0;
                 for(int i=first_colon_len;i<len;i++){
                     line_int=line_int*10+current_line[i]-'0';
                     printf("%c",current_line[i]);
+                    current_line_num[temp_i++]=current_line[i];
                 }     
+                current_line_num[temp_i++]='\0';
                 printf(" %d",line_int);
                 printf("| (range of len: %d-%d), \n \n",first_colon_len,len);
                 second_colon=false;
                 same_file=false;
-              
             }
+ 
         }
         if(exit_loop){
             break;

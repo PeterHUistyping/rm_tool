@@ -16,5 +16,7 @@ generate deletedLog with timestamp.
 ## Choice：
 1. skip
 2. rm variable/single line
-3. rm specific lines
-4. rm function
+3. vim
+4. rm specific lines
+5. rm function
+6. 
