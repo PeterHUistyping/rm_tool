@@ -4,6 +4,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <time.h>
+#include <wait.h>
 # define buffer_size 1000
 char current_line[buffer_size]; // search_res.log
 char filename_last[buffer_size]; //current for future use 
@@ -64,10 +65,8 @@ void print_deleteList(FILE *fp,int st_line, int end_line){
     fprintf(fp,"\n");
 }
 void flush_delete(FILE *fp,FILE *fp_d){
+         printf("2")      ;
     char temp[buffer_size];
-    // strcat(temp, filename_last);
-    // strcat(temp, ".log");
-    
     struct tm *timenow;
     time_t now = time(NULL);
     timenow = gmtime(&now);
@@ -75,25 +74,34 @@ void flush_delete(FILE *fp,FILE *fp_d){
     
     fflush(fp_d);
     fflush(fp);
-    fclose(fp_d);
-    fclose(fp);
-   
+    // fclose(fp_d);
+    // fclose(fp);
  
+    pid_t childPid = fork();
+    int status;
+    flush_delete(fp,fp_d);
+        printf("1")      ;
     execl("/usr/bin/bash","/usr/bin/bash","deleteList.sh",NULL);
-    strftime(temp, sizeof(temp), "searchLog/searchList_%Y-%m-%d_%H-%M-%S.log", timenow);
-    char *path = temp;
-    execl("/usr/bin/mv","/usr/bin/mv","searchLog/searchList.log",path,NULL);    
-    strftime(temp, sizeof(temp), "deletedLog/deleteList_%Y-%m-%d_%H-%M-%S.log", timenow);  
-    path = temp; 
-    execl("/usr/bin/mv","/usr/bin/mv","deleteList.sh",path,NULL);
+        
+    
+    //
+    // strftime(temp, sizeof(temp), "searchLog/searchList_%Y-%m-%d_%H-%M-%S.log", timenow);
+    // char *path = temp;
+    // execl("/usr/bin/cp","/usr/bin/cp","searchLog/searchList.log",path,NULL);    
+    // strftime(temp, sizeof(temp), "deletedLog/deleteList_%Y-%m-%d_%H-%M-%S.log", timenow);  
+    // path = temp; 
+    // execl("/usr/bin/cp","/usr/bin/cp","deleteList.sh",path,NULL);
+    //  printf("1")      ;
+    // fp_d = fopen ("deleteList.sh", "w+");
+    // fp= fopen("./searchLog/searchList.log","r");
+    // openfile_check(fp);
+    // openfile_check(fp_d);
+    // fprintf(fp, "# The below shell commands will be run by linux bash and stored as log.\n");
+    // execl("/usr/bin/ack","/usr/bin/ack","pixel ./test > searchLog/searchList.log",NULL);
 
-    fp_d = fopen ("deleteList.sh", "w+");
-    fp= fopen("./searchLog/searchList.log","r");
-    openfile_check(fp);
-    openfile_check(fp_d);
-    fprintf(fp, "# The below shell commands will be run by linux bash and stored as log.\n");
-    execl("/usr/bin/ack","/usr/bin/ack","pixel ./test > searchLog/searchList.log",NULL);
-
+}
+void test(){
+    execl("/usr/bin/bash","/usr/bin/bash","deleteList.sh",NULL);
 }
 void switch_input(FILE *fp,FILE *fp_d, int* line_delta){
         int operation=0;
@@ -101,11 +109,11 @@ void switch_input(FILE *fp,FILE *fp_d, int* line_delta){
         while( 1 ){
             printf("\033[1mPlease enter your operation choice:  ");    //bold
             printf("\033[0m\n");//black
-            printf("%d for [EXIT and Flush];\n",exit_switch); 
-            printf("%d for [SKIP this line]\n",skip); 
-            printf("%d for [DELETE single line]\n",delete_single); 
-            printf("%d for [Vim]\n",vim);
-            printf("%d for [DELETE Mul lines]",delete_multiple);
+            printf("%d [EXIT and Flush]\n",exit_switch); 
+            printf("%d [SKIP this line]\n",skip); 
+            printf("%d [DELETE single line]\n",delete_single); 
+            printf("%d [Vim]\n",vim);
+            printf("%d [DELETE Mul lines]",delete_multiple);
             printf("     INPUT[0-%d]:",Last); 
             scanf("%d",&operation);
             switch (operation) { 
@@ -147,22 +155,28 @@ void switch_input(FILE *fp,FILE *fp_d, int* line_delta){
                     printf("\033[0m\n");//black
                     pid_t childPid = fork();
                     int status;
-                    
+                    //flush_delete(fp,fp_d);
+                     test();
+                        printf("1")      ;
                     if (childPid) {
-                        flush_delete(fp,fp_d);      
+                        
                     }
                     else {
-                        char filename_current_full[buffer_size]; 
-                        filename_current_full[0]='.'; 
-                        filename_current_full[1]='/'; 
-                        filename_current_full[2]='\0'; 
-                        strcat(filename_current_full, filename_last);
-                        char* path = filename_current_full;
-                        char lines_temp[buffer_size]="+"; 
-                        strcat(lines_temp, current_line_num);
-                        char * lines_ = lines_temp;
+                        // wait(&status);
+                        //  printf("2")      ;
                         
-                        execl("/usr/bin/vim","/usr/bin/vim",lines_,path,NULL);         
+                        // char filename_current_full[buffer_size]; 
+                        // filename_current_full[0]='.'; 
+                        // filename_current_full[1]='/'; 
+                        // filename_current_full[2]='\0'; 
+                        // strcat(filename_current_full, filename_last);
+                        // char* path = filename_current_full;
+                        // char lines_temp[buffer_size]="+"; 
+                        // strcat(lines_temp, current_line_num);
+                        // char * lines_ = lines_temp;
+                        
+                        // execl("/usr/bin/vim","/usr/bin/vim",lines_,path,NULL);  
+                        execl("/usr/bin/echo","/usr/bin/echo","Hi",NULL);       
                     }
                     break;
                 default:
@@ -274,6 +288,7 @@ void process_search_log(FILE *fp,FILE *fp_d){
     printf("Max_len: %d \n",max_len);
     rewind(fp);
 }
+
 
 int main(){
     printf("------WELCOME to USE rm_tool 2023!------\n");   

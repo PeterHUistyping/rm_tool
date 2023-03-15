@@ -23,7 +23,6 @@ cd build
 echo ------ Start to build the rm_tool needed ------
 cmake ..
 make
-cp rm_tool ../rm_tool
 cd ..
 
 

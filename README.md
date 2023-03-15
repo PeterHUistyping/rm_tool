@@ -22,3 +22,5 @@ generate deletedLog with timestamp.
 4. rm specific lines
     Delete Multiple Lines is asynchronous, it will trigger flush and reload by design
 5. rm function
+
+cd /mnt/d/Work/Tools/rm_tool
