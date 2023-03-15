@@ -292,7 +292,7 @@ void process_search_log(FILE *fp,FILE *fp_d){
 }
 
 
-int main(){
+int main(int argc, char *argv[]){
     char temp[buffer_size];
     struct tm *timenow;
     time_t now = time(NULL);

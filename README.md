@@ -29,6 +29,7 @@ generate deletedLog with timestamp.
 4. rm specific lines  <br/>
     Delete Multiple Lines is asynchronous, it will trigger flush and reload by design <br/>
     ADD acknowledge confirmation, and could AVOID future warning by using variable  bool future_acknowledge=true; <br/>
-5. rm function
+5. ack
+6. rm function
 
 cd /mnt/d/Work/Tools/rm_tool
