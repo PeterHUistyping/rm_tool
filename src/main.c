@@ -95,8 +95,9 @@ void process_search_log(FILE *fp,FILE *fp_d){
                 for(int i=first_colon_len;i<len;i++){
                     line_int=line_int*10+filename[i]-'0';
                     printf("%c",filename[i]);
-                    printf(" %d",line_int);
+                   
                 }     
+                printf(" %d",line_int);
                 printf("| (range of len: %d-%d), \n \n",first_colon_len,len);
                 second_colon=false;
                 same_file=false;
