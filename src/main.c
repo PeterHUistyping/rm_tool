@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
-char filename[1000]; // search_res.log
+char current_line[1000]; // search_res.log
 char filename_last[1000];
 int first_colon_len=0;
 void file_data(FILE *fp){
@@ -29,14 +29,14 @@ void file_data(FILE *fp){
 void print_singledeleteList(FILE *fp,int st_line){
     fprintf(fp, "sed -i '%dd' ", st_line);   
     for(int i=0;i<first_colon_len-1;i++){
-        fprintf(fp,"%c",filename[i]);
+        fprintf(fp,"%c",current_line[i]);
     }
     fprintf(fp,"\n");
 }
 void print_deleteList(FILE *fp,int st_line, int end_line){
     fprintf(fp, "sed -i '%d,%dd' ", st_line,end_line);
     for(int i=0;i<first_colon_len-1;i++){
-        fprintf(fp,"%c",filename[i]);
+        fprintf(fp,"%c",current_line[i]);
     }
     fprintf(fp,"\n");
 }
@@ -62,8 +62,8 @@ void process_search_log(FILE *fp,FILE *fp_d){
         if(ch==':'){
             if (first_colon){
                 if(!first_hit_colon){
-                    // printf("%d",strncmp(filename, filename_last, len)); //debug
-                   if(strncmp(filename, filename_last, len) == 0){
+                    // printf("%d",strncmp(current_line, filename_last, len)); //debug
+                   if(strncmp(current_line, filename_last, len) == 0){
                         same_file=true;
                         // printf("%d,%d",first_hit_colon,same_file); //debug
                     }
@@ -74,12 +74,12 @@ void process_search_log(FILE *fp,FILE *fp_d){
                 else{
                     first_hit_colon=false;
                 }
-                strncpy(filename_last, filename, len);
+                strncpy(filename_last, current_line, len);
                 
                 if (first_hit_colon||!same_file){
                     printf("file name: |");
                     for(int i=0;i<len;i++){
-                        printf("%c",filename[i]);
+                        printf("%c",current_line[i]);
                     }
                     printf("| (range of file name: %d)\n ",len);
                 }
@@ -93,8 +93,8 @@ void process_search_log(FILE *fp,FILE *fp_d){
                 printf("line: |");
                 int line_int=0;
                 for(int i=first_colon_len;i<len;i++){
-                    line_int=line_int*10+filename[i]-'0';
-                    printf("%c",filename[i]);
+                    line_int=line_int*10+current_line[i]-'0';
+                    printf("%c",current_line[i]);
                    
                 }     
                 printf(" %d",line_int);
@@ -134,7 +134,7 @@ void process_search_log(FILE *fp,FILE *fp_d){
         if(exit){
             break;
         }
-        filename[len]=ch;
+        current_line[len]=ch;
         ++len;
         if(ch == '\n'){
             if(max_len < len)
