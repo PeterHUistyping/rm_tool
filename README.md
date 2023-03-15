@@ -2,6 +2,12 @@
 Integration of search, view and delete using Linux System Call ack, vim and sed.
 ![del_single](./del_single.png)
 Make use of enum, switch, file handling in C, system call.
+## Usage
+Place this repo at the same directory as your working_folder (to be cleaned and deleted).
+```
+- rm_tool
+- working_folder
+```
 ## Pipeline
 ack > search_res.log
 
@@ -16,11 +22,13 @@ generate deletedLog with timestamp.
 
 ## Choice：
 1. skip
-2. rm variable/single line
-3. vim
+2. rm variable/single line <br/>
+    No need to flush, since it's restricted to a subset of lines.
+3. vim  <br/>
     flush -> redo ack search
-4. rm specific lines
-    Delete Multiple Lines is asynchronous, it will trigger flush and reload by design
+4. rm specific lines  <br/>
+    Delete Multiple Lines is asynchronous, it will trigger flush and reload by design <br/>
+    ADD acknowledge confirmation, and could AVOID future warning by using variable  bool future_acknowledge=true; <br/>
 5. rm function
 
 cd /mnt/d/Work/Tools/rm_tool

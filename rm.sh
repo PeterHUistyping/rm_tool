@@ -12,8 +12,8 @@ fi
 # do
 # ...
 # done
-ack pixel ./test  
-ack pixel ./test > ./searchLog/searchList.log
+ack pixel ../test  
+ack pixel ../test > ./searchLog/searchList.log
 
 echo ------ rm the previous build  ------
 rm -rf build

@@ -12,6 +12,7 @@ char current_line_num[buffer_size];
 int first_colon_len=0;
 int line_int=0;
 bool exit_loop=false;
+bool future_acknowledge=true;
 FILE *fp_deleteLog;
 enum op {
     exit_switch,
@@ -67,23 +68,30 @@ void print_deleteList(FILE *fp,int st_line, int end_line){
 }
 void acknowledge(){
     printf("\033[32mDelete multiple lines is asynchronous, flushing and reloading by design!\n"); //green
-    printf("\033[0mPlease wait until the program is reloading and processing the deletion, thanks! \nInput ANY character to confirm acknowledge: ");//black
-    char temp[buffer_size];
-    scanf("%s",temp);
+    printf("\033[0mPlease wait until the program is reloading and processing the deletion, thanks! \n");//black
+    if(future_acknowledge){
+        printf("\033[0mInput ANY character to confirm acknowledge: ");//black
+        char temp[buffer_size];
+        scanf("%s",temp);
+        printf("\033[0mInput y if you would remove future confirmation: ");//black
+        scanf("%s",temp);
+        if(temp[0]=='y'){
+            future_acknowledge=false;
+        }
+    }
+    
 }
 void flush_delete(FILE *fp,FILE *fp_d){
     acknowledge();
     fflush(fp_d);
     fflush(fp);
     fp=freopen("","w",fp);
-    system("./deleteList.sh");  
+    system("bash deleteList.sh");  
     system("> deleteList.sh");  
     system("> searchLog/searchList.log");    
-    system("ack pixel ./test > ./searchLog/searchList.log");    
+    system("ack pixel ../test > ./searchLog/searchList.log");    
     system("echo Flushed!");    
-
-    int status;
-   
+       
     //execl("/usr/bin/bash","/usr/bin/bash","deleteList.sh",NULL);
     //execl("/usr/bin/echo","/usr/bin/echo","Hi",NULL);  
     
@@ -119,7 +127,7 @@ void switch_input(FILE *fp,FILE *fp_d, int* line_delta){
                    
                     *line_delta=0;
                     print_deleteList(fp_deleteLog,st_line,end_line);
-                    
+                    break;
                 case exit_switch:
                     printf("\033[32m[EXIT and Flush] Well received!\n"); //green
                     printf("\033[0m\n");//black
@@ -144,17 +152,14 @@ void switch_input(FILE *fp,FILE *fp_d, int* line_delta){
                     flush_delete(fp,fp_d);
                     pid_t childPid = fork();
                     if (childPid) {
-                        printf("child")      ;
-                       
                     }
                     else {
-                        wait(&status);
-                         printf("father")      ;
-                        
+                        wait(&status);          
                         char filename_current_full[buffer_size]; 
                         filename_current_full[0]='.'; 
-                        filename_current_full[1]='/'; 
-                        filename_current_full[2]='\0'; 
+                        filename_current_full[1]='.'; 
+                        filename_current_full[2]='/'; 
+                        filename_current_full[3]='\0'; 
                         strcat(filename_current_full, filename_last);
                         char* path = filename_current_full;
                         char lines_temp[buffer_size]="+"; 
@@ -168,7 +173,7 @@ void switch_input(FILE *fp,FILE *fp_d, int* line_delta){
                     printf("\033[33mFailure, Invalid input: %d! Please retry or exit. ",operation); //yellow
                     printf("\033[0m\n");//black
             }
-            if(operation > Last || operation<First || operation== vim){
+            if(operation > Last || operation<First || operation== vim || operation==delete_multiple){
                 continue;
             }
             else{
@@ -292,8 +297,8 @@ int main(){
     openfile_check(fp_search);
     openfile_check(fp_deleteList);
     openfile_check(fp_deleteLog);
-    fprintf(fp_deleteList, "# The below shell commands will be run by linux bash and stored as log.\n");
-    fprintf(fp_deleteLog, "# The below shell commands will be run by linux bash and stored as log.\n");
+    fprintf(fp_deleteList, "# The below shell commands will be run by linux bash and stored as log.\n The line is calculated after each deletion.\n");
+    fprintf(fp_deleteLog, "# The below shell commands will be run by linux bash and stored as log.\n The line is calculated after each deletion.\n");
    
 
     file_data(fp_search);
