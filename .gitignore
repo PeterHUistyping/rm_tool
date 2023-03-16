@@ -2,3 +2,4 @@ build/
 deletedLog/ 
 rm_tool
 searchLog/
+test/install.log

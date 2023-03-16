@@ -2,12 +2,19 @@
 Integration of search, view and delete using Linux System Call ack, vim and sed.
 ![del_single](./del_single.png)
 Make use of enum, switch, file handling in C, system call.
-## Usage
+## How to Use
 Place this repo at the same directory as your working_folder (to be cleaned and deleted).
 ```
 - rm_tool
 - working_folder
-
+```
+### Initiate the tools needed
+```
+./init.h
+```
+Install the tools needed and have test sets updated.
+### Usage
+```
 ./rm.sh -h
 Usage ./rm.sh   -p ../test -w pixel [-d] 
                 -p PATH -w SEARCH_WORD [-d] 
