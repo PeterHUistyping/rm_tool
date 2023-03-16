@@ -20,17 +20,18 @@ while getopts ":hitwdec" opt; do
          echo "   " >&2
         echo "Usage   ./rm.sh SEARCH_WORD PATH  [-d]" >&2
         echo "           e.g. pixel     ../test [-d]" >&2
+        echo "                                   enter tool searching the keyword provided" >&2
         echo "Same as ./rm.sh -w SEARCH_WORD -p PATH    [-d]" >&2
         echo "           e.g. -w pixel       -p ../test [-d]" >&2
         echo "        Optional:" >&2
-        echo "                -d        together with -p -w to disable warning" >&2
+        echo "                -d                 together with -p -w to disable warning" >&2
          echo "   " >&2
         echo "        Others:" >&2
-        echo "                -i        initialize & *clean* log " >&2
-        echo "                -e        show the last time debug log " >&2
-        echo "                -h        display this help and exit" >&2
-        echo "                -c        clear screen" >&2
-        echo "                -t NUM    for dev and test" >&2
+        echo "                -i  -init          initialize & *clean* log " >&2
+        echo "                -e  -error         show the last time debug log " >&2
+        echo "                -h  -help          display this help and exit" >&2
+        echo "                -c  -clear         clear screen" >&2
+        echo "                -t NUM             for dev and test" >&2
         echo "        Choice:" >&2
         echo "                  -t 1 is -w pixel -p ../test -d" >&2
         echo "                  -t 2 is -w pixel -p ../test" >&2
@@ -63,6 +64,8 @@ while getopts ":hitwdec" opt; do
 done
 fi
 if [ "$#" -eq 2 ]; then
+    word=$1       
+    path=$2
 while getopts ":t:" opt; do
   case $opt in
     t)
@@ -94,8 +97,7 @@ while getopts ":t:" opt; do
     ;;
     esac
 done
-    word=$1       
-    path=$2
+
 fi
 if [ "$#" -eq 3 ]; then
     word=$1       

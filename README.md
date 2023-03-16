@@ -1,6 +1,7 @@
 # rm_tool Linxu
 Integration of search, view and delete using Linux System Call ack, vim and sed.
 In addition, there are others system calls integrated, like clear screen.
+By choosing the right mode, you could do nearly everthing, including any linux command.
 ![del_single](./del_single.png)
 Make use of enum, switch, file handling in C, system call.
 ## How to Use
