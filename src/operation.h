@@ -38,7 +38,7 @@ void switch_input(FILE *fp, FILE *fp_d, int *line_delta)
         {
         case delete_file:
             flush_delete(fp, fp_d, line_delta);
-            char cmd_tem[buffer_size] = "sudo rm -f ";
+            {char cmd_tem[buffer_size] = "sudo rm -f ";}
             strcat(cmd_tem, filename_last);
             system(cmd_tem);
             print_deleteFile(fp_deleteLog,filename_last);
@@ -57,7 +57,7 @@ void switch_input(FILE *fp, FILE *fp_d, int *line_delta)
             //printf("\n");
             break;
         case ack:
-            char cmd_temp[buffer_size]="ack ";
+            {char cmd_temp[buffer_size]="ack ";}
             
             strcat(cmd_temp, search_word);
             strcat(cmd_temp, " ");
@@ -113,7 +113,7 @@ void switch_input(FILE *fp, FILE *fp_d, int *line_delta)
             //  strcat(filename_current_full, filename_last);
             //  char* path = filename_current_full;
             char *path = filename_last;
-            char lines_temp[buffer_size] = "vim +";
+            {char lines_temp[buffer_size] = "vim +";}
             strcat(lines_temp, current_line_num);
             strcat(lines_temp, " ");
             strcat(lines_temp, filename_last);
