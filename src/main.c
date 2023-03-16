@@ -13,6 +13,8 @@ int first_colon_len=0;
 int line_int=0;
 bool exit_loop=false;
 bool future_acknowledge=true;
+char search_path[buffer_size];
+char search_word[buffer_size];
 FILE *fp_deleteLog;
 enum op {
     exit_switch,
@@ -89,8 +91,15 @@ void flush_delete(FILE *fp,FILE *fp_d,int* line_delta){
     
     system("bash deleteList.sh");  
     system("echo # flushed > deleteList.sh");  
-    system("> searchLog/searchList.log");    
-    system("ack pixel ../test > ./searchLog/searchList.log");   
+    system("> searchLog/searchList.log");   
+    char cmd_temp[buffer_size]="ack "; 
+    strcat(cmd_temp, search_word);
+    strcat(cmd_temp, " ");
+    strcat(cmd_temp, search_path);
+    strcat(cmd_temp, " > ./searchLog/searchList.log");
+    char *cmd_ack = cmd_temp;                 
+    system(cmd_ack);     
+    // system("ack pixel ../test > ");   
     *line_delta=0;
     system("echo Flushed!");  
     // fp=freopen("","w",fp);  
@@ -118,6 +127,17 @@ void switch_input(FILE *fp,FILE *fp_d, int* line_delta){
             printf("     INPUT[0-%d]:",Last); 
             scanf("%d",&operation);
             switch (operation) { 
+                case ack:
+                    char cmd_temp[buffer_size]="ack "; 
+                    strcat(cmd_temp, search_word);
+                    strcat(cmd_temp, " ");
+                    strcat(cmd_temp, search_path);
+                    char *cmd_ack = cmd_temp;
+                    // for(int i=0;i<strlen(cmd_ack);i++){
+                    //     printf("%c",cmd_ack[i]);
+                    // }
+                    system(cmd_ack);    
+                    break;
                 case delete_multiple: 
                     printf("\033[31m[DELETE Mul lines] Well received!\n"); //red
                     printf("\033[0m\n");//black
@@ -174,9 +194,7 @@ void switch_input(FILE *fp,FILE *fp_d, int* line_delta){
                         //execl("/usr/bin/vim","/usr/bin/vim",lines_,path,NULL);      
                     //}
                     break;
-                 case ack:
-                    system("ack pixel ../test ");    
-                    break;
+               
                 default:
                     printf("\033[33mFailure, Invalid input: %d! Please retry or exit. ",operation); //yellow
                     printf("\033[0m\n");//black
@@ -310,6 +328,11 @@ void welcome(){
 }
 
 int main(int argc, char *argv[]){
+    if( argv[3][1]=='i'){
+        future_acknowledge=false;
+    }
+    strncpy(search_path,argv[1],strlen(argv[1]));
+    strncpy(search_word,argv[2],strlen(argv[2]));
     char temp[buffer_size];
     struct tm *timenow;
     time_t now = time(NULL);

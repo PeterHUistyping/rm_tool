@@ -38,6 +38,7 @@ sed -i '1,2d' 'test/fops.c'
 
 generate deletedLog with timestamp.
 
+**buffer** size fixed at 1000.
 ## Choice：
 1. skip
 2. rm variable/single line <br/>
