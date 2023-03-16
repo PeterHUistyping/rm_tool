@@ -21,21 +21,21 @@ char search_word[buffer_size];
 FILE *fp_deleteLog;
 void acknowledge();
 bool has_delete=false;
-void flush_delete(FILE *fp, FILE *fp_d, int *line_delta)
+void flush_delete( FILE *fp_d, int *line_delta)
 {
     acknowledge();
     if(!has_delete){
         return;
     }
     fflush(fp_d);
-    fflush(fp);
+    
 
     system("bash deleteList.sh");
     has_delete=false;
     system("echo # flushed > deleteList.sh");
     
     *line_delta = 0;
-    rewind(fp);
+    
     system("echo "" > deleteList.sh");
     system("echo Flushed deleteList!");
 
@@ -49,11 +49,12 @@ void flush_delete(FILE *fp, FILE *fp_d, int *line_delta)
     // char *path = temp;
     // execl("/usr/bin/cp","/usr/bin/cp","deleteList.sh",path,NULL)
 }
-void flush_updateSearch()
+void flush_updateSearch(FILE *fp)
 {
     if(!has_delete){
         return;
     }
+    fflush(fp);
     system("> searchLog/searchList.log");
     char cmd_temp[buffer_size] = "ack ";
     strcat(cmd_temp, search_word);
@@ -62,7 +63,9 @@ void flush_updateSearch()
     strcat(cmd_temp, " > ./searchLog/searchList.log");
     system("echo Flushed searchList!");
     char *cmd_ack = cmd_temp;
+    rewind(fp);
     system(cmd_ack);
+
     // system("ack pixel ../test > ");
     
 }
