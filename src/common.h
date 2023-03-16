@@ -31,13 +31,14 @@ void flush_delete(FILE *fp, FILE *fp_d, int *line_delta)
     fflush(fp);
 
     system("bash deleteList.sh");
+    has_delete=false;
     system("echo # flushed > deleteList.sh");
     
     *line_delta = 0;
     rewind(fp);
     system("echo "" > deleteList.sh");
     system("echo Flushed!");
-    
+
     // fclose(fp);
     // fp=freopen("","w",fp);   // reopen to flush everything
     // 
@@ -62,7 +63,7 @@ void flush_updateSearch()
     char *cmd_ack = cmd_temp;
     system(cmd_ack);
     // system("ack pixel ../test > ");
-    has_delete=false;
+    
 }
 
 
