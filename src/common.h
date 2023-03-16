@@ -83,7 +83,7 @@ void print_deleteFile(FILE *fp,char * filename)
 
 void acknowledge()
 {
-    printf("\033[32m\nDelete multiple lines is asynchronous, flushing and reloading by design!\n");        // green
+    printf("\033[32m\nThis operation could lead to asynchronous result, flushing and reloading by design!\n");        // green
     printf("\033[0mPlease wait until the program is reloading and processing the deletion, thanks! \n"); // black
     if (future_acknowledge)
     {

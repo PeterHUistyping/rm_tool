@@ -37,11 +37,11 @@ void switch_input(FILE *fp, FILE *fp_d, int *line_delta)
         switch (operation)
         {
         case delete_file:
-            flush_delete(fp, fp_d, line_delta);
             {char cmd_tem[buffer_size] = "sudo rm -f ";
             strcat(cmd_tem, filename_last);
             system(cmd_tem);
             print_deleteFile(fp_deleteLog,filename_last);}
+            flush_delete(fp, fp_d, line_delta);
             break;
         case linux_cmd: 
             flush_delete(fp, fp_d, line_delta);

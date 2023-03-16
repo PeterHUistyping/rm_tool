@@ -44,6 +44,7 @@ void process_search_log(FILE *fp, FILE *fp_d)
                 {
                     first_hit_colon = false;
                 }
+                memset(filename_last, '\0', sizeof(filename_last));
                 strncpy(filename_last, current_line, len);
 
                 if (first_hit_colon || !same_file)
