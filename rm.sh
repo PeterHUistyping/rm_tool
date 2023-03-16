@@ -15,12 +15,12 @@ while getopts ":h" opt; do
   case $opt in
     h)
         echo "Usage ./rm.sh -p ../test -w pixel" >&2
-        echo "-h  display this help and exit" >&2
-        echo "-p [path] -w [search word], e.g. -p ../test -w pixel" >&2
+        echo "              -h display this help and exit" >&2
+        echo "              -p [path] -w [search word], e.g. -p ../test -w pixel" >&2
+        echo "              -t [num] for dev and test" >&2
+        exit 1
     ;;
-    t)
-        echo "-t  for dev and test" >&2
-    ;;
+  
    
     \?)
       echo "Invalid option: -$OPTARG. Use -h to view usage." >&2
@@ -29,11 +29,34 @@ while getopts ":h" opt; do
   esac
 done
 fi
+if [ "$#" -eq 2 ]; then
+while getopts ":t:" opt; do
+  case $opt in
+    t)
+        args="$OPTARG"
+    ;;   
+    \?)
+      echo "Invalid option: -$OPTARG. Use -h to view usage." >&2
+      exit 1
+      ;;
+    esac
+    case $OPTARG in
+        -*)
+            echo "Invalid option: -$OPTARG. Use -h to view usage." >&2
+        exit 1
+        ;;
+    esac
+    
+done
+    echo Test $args
+    path=../test 
+    word=pixel
+fi
 if [ "$#" -eq 4 ]; then
 while getopts ":p:w:" opt; do
     case $opt in
         p)
-            args_1="$OPTARG"
+            path="$OPTARG"
         ;;
         w)
             word="$OPTARG" 
@@ -48,10 +71,10 @@ while getopts ":p:w:" opt; do
             echo "Invalid option: -$OPTARG. Use -h to view usage." >&2
         exit 1
         ;;
-    esac
-done
+    esac  
+done 
 fi
-echo searching {$word} in path [$args_1]
+echo searching {$word} in path [$path]
 
 if ! [ -d "$searchLog_DIR" ]; then 
     mkdir searchLog 
@@ -77,7 +100,7 @@ make > detail.log 2>&1
 echo ------ Build detail has been written to: build/detail.log ------
 cd ..
 
-./build/rm_tool 
+./build/rm_tool $path  $word
  
 
 
