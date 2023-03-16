@@ -38,10 +38,10 @@ void switch_input(FILE *fp, FILE *fp_d, int *line_delta)
         {
         case delete_file:
             flush_delete(fp, fp_d, line_delta);
-            {char cmd_tem[buffer_size] = "sudo rm -f ";}
+            {char cmd_tem[buffer_size] = "sudo rm -f ";
             strcat(cmd_tem, filename_last);
             system(cmd_tem);
-            print_deleteFile(fp_deleteLog,filename_last);
+            print_deleteFile(fp_deleteLog,filename_last);}
             break;
         case linux_cmd: 
             flush_delete(fp, fp_d, line_delta);
@@ -57,7 +57,7 @@ void switch_input(FILE *fp, FILE *fp_d, int *line_delta)
             //printf("\n");
             break;
         case ack:
-            {char cmd_temp[buffer_size]="ack ";}
+            {char cmd_temp[buffer_size]="ack ";
             
             strcat(cmd_temp, search_word);
             strcat(cmd_temp, " ");
@@ -66,7 +66,7 @@ void switch_input(FILE *fp, FILE *fp_d, int *line_delta)
             // for(int i=0;i<strlen(cmd_ack);i++){
             //     printf("%c",cmd_ack[i]);
             // }
-            system(cmd_ack);
+            system(cmd_ack);}
             break;
         case delete_multiple:
             printf("\033[31m[DELETE Mul lines] Well received!\n"); // red
@@ -113,12 +113,12 @@ void switch_input(FILE *fp, FILE *fp_d, int *line_delta)
             //  strcat(filename_current_full, filename_last);
             //  char* path = filename_current_full;
             char *path = filename_last;
-            {char lines_temp[buffer_size] = "vim +";}
+            {char lines_temp[buffer_size] = "vim +";
             strcat(lines_temp, current_line_num);
             strcat(lines_temp, " ");
             strcat(lines_temp, filename_last);
             char *cmd = lines_temp;
-            system(cmd);
+            system(cmd);}
             // execl("/usr/bin/vim","/usr/bin/vim",lines_,path,NULL);
             //}
             break;
