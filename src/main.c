@@ -49,8 +49,8 @@ void file_data(FILE *fp){
     }
     if(len)
         ++lines;
-    printf("Lines of the file: %d \n",lines);
-    printf("Max_len: %d \n",max_len);
+    printf("Max_len of the a line is %d \n",max_len);
+    printf("Review %d searches\n",lines);
     rewind(fp);
 }
 void print_singledeleteList(FILE *fp,int st_line){
@@ -290,14 +290,31 @@ void process_search_log(FILE *fp,FILE *fp_d){
     printf("Review %d searches\n",lines);
     rewind(fp);
 }
-
+void welcome(){
+    printf("--- ****** --- WELCOME to USE rm_tool 2023:) --- ****** ---\n");
+    printf("\n");
+	int i,j;
+	for (i = 1; i <= 13; i+=2)
+	{
+		for (j = 1; j <=i; j++)
+			printf("*");
+		printf("\n");
+	}
+	for (i = 11; i>=1; i-=2)
+	{
+		for (j = 1; j<=i; j++)
+			printf("*");
+		printf("\n");
+	}
+    printf("\n");
+}
 
 int main(int argc, char *argv[]){
     char temp[buffer_size];
     struct tm *timenow;
     time_t now = time(NULL);
     timenow = gmtime(&now);
-    printf("\n\n\n\n\n\n\n\n\n\n --- ****** --- WELCOME to USE rm_tool 2023:) --- ****** ---\n");   
+    welcome();
 
     strftime(temp, sizeof(temp), "deletedLog/deleteList_%Y-%m-%d_%H-%M-%S.log", timenow);  
     char *path = temp;
