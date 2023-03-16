@@ -20,19 +20,26 @@ void switch_input(FILE *fp, FILE *fp_d, int *line_delta)
 {
     int operation = 0;
     int st_line, end_line;
+    bool first=true;
     while (1)
     {
-        printf("\033[1mPlease enter your operation choice:  "); // bold
-        printf("\033[0m\n");                                    // black
-        printf("%d [EXIT and Flush]\n", exit_switch);
-        printf("%d [SKIP this line]\n", skip);
-        printf("%d [DELETE single line]\n", delete_single);
-        printf("%d [Vim]\n", vim);
-        printf("%d [DELETE Mul lines]\n", delete_multiple);
-        printf("%d [ack search]\n", ack);
-        printf("%d [DELETE File]\n",delete_file);
-        printf("%d [Any other linux command on cwd]", linux_cmd);
-        printf("     INPUT[0-%d]:", Last);
+        if(first){
+            first=false;
+            printf("\033[1mPlease enter your operation choice:  "); // bold
+            printf("\033[0m\n");                                    // black
+            printf("%d [EXIT and Flush]\n", exit_switch);
+            printf("%d [SKIP this line]\n", skip);
+            printf("%d [DELETE single line]\n", delete_single);
+            printf("%d [Vim]\n", vim);
+            printf("%d [DELETE Mul lines]\n", delete_multiple);
+            printf("%d [ack search]\n", ack);
+            printf("%d [DELETE File]\n",delete_file);
+            printf("%d [Any other linux command on cwd]", linux_cmd);
+            printf("     INPUT[0-%d]:", Last);
+        }
+        else{
+            printf("INPUT[0-%d]:", Last);
+        }        
         scanf("%d", &operation);
         switch (operation)
         {
