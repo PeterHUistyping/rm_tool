@@ -2,7 +2,7 @@ LOG_DIR=log
 BUILD_DIR=build
 DEL_DIR=deletedLog
 searchLog_DIR=searchLog
-
+option1=default_warning
 # ./intro.sh $@
 
 if [ -z "$1" ]
@@ -14,10 +14,15 @@ if [ "$#" -eq 1 ]; then
 while getopts ":h" opt; do
   case $opt in
     h)
-        echo "Usage ./rm.sh -p ../test -w pixel" >&2
+        echo "Usage ./rm.sh -p ../test -w pixel [-d]" >&2
+        echo "              -p PATH -w SEARCH_WORD [-d]" >&2
+        echo "                      e.g. -p ../test -w pixel [-d]" >&2
+        echo "              -d together with -p -w to disable warning" >&2
+        echo "              -t NUM for dev and test" >&2
+        echo "                   Choice:" >&2
+        echo "                      -t 1 is -p ../test -w pixel -d" >&2
+        echo "                      -t 2 is -p ../test -w pixel " >&2
         echo "              -h display this help and exit" >&2
-        echo "              -p [path] -w [search word], e.g. -p ../test -w pixel" >&2
-        echo "              -t [num] for dev and test" >&2
         exit 1
     ;;
   
@@ -46,11 +51,20 @@ while getopts ":t:" opt; do
         exit 1
         ;;
     esac
-    
 done
     echo Test $args
-    path=../test 
-    word=pixel
+    case $args in 
+    1)
+        path=../test 
+        word=pixel
+        option1=disable_warning
+    ;;
+    2) 
+        path=../test 
+        word=pixel
+    ;;
+    esac
+
 fi
 if [ "$#" -eq 4 ]; then
 while getopts ":p:w:" opt; do
@@ -74,7 +88,31 @@ while getopts ":p:w:" opt; do
     esac  
 done 
 fi
-echo searching {$word} in path [$path]
+if [ "$#" -eq 5 ]; then
+while getopts ":p:w:d" opt; do
+    case $opt in
+        p)
+            path="$OPTARG"
+        ;;
+        w)
+            word="$OPTARG" 
+        ;;
+        d)  option1=disable_warning
+        ;;
+        \?)
+        echo "Invalid option: -$opt. Use -h to view usage." >&2
+        exit 1
+        ;;
+    esac
+    case $OPTARG in
+        -*)
+            echo "Invalid option: -$OPTARG. Use -h to view usage." >&2
+        exit 1
+        ;;
+    esac  
+done 
+fi
+echo searching {$word} in path [$path] with $option1
 
 if ! [ -d "$searchLog_DIR" ]; then 
     mkdir searchLog 
@@ -100,10 +138,8 @@ make > detail.log 2>&1
 echo ------ Build detail has been written to: build/detail.log ------
 cd ..
 
-./build/rm_tool $path  $word
+./build/rm_tool $path  $word    $option1
  
-
-
 
 echo ---Starting to delete unused code---
 
