@@ -12,7 +12,6 @@ fi
 # do
 # ...
 # done
-ack pixel ../test  
 ack pixel ../test > ./searchLog/searchList.log
 
 echo ------ rm the previous build  ------
@@ -21,11 +20,13 @@ mkdir build
 cd build
 
 echo ------ Start to build the rm_tool needed ------
-cmake ..
-make
+cmake .. > CMake.log 2>&1  
+echo ------ CMake detail written to: build/CMake.log ------
+make > detail.log 2>&1  
+echo ------ Build detail written to: build/detail.log ------
 cd ..
 ack pixel ../test
-./build/rm_tool
+./build/rm_tool 
  
 
 
