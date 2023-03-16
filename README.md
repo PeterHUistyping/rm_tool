@@ -7,6 +7,17 @@ Place this repo at the same directory as your working_folder (to be cleaned and 
 ```
 - rm_tool
 - working_folder
+
+./rm.sh -h
+Usage ./rm.sh   -p ../test -w pixel [-d] 
+                -p PATH -w SEARCH_WORD [-d] 
+                        e.g. -p ../test -w pixel [-d] 
+                -d together with -p -w to disable warning 
+                -t NUM for dev and test 
+                    Choice: 
+                        -t 1 is -p ../test -w pixel -d 
+                        -t 2 is -p ../test -w pixel  
+                -h display this help and exit 
 ```
 ## Pipeline
 ack > search_res.log
