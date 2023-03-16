@@ -57,7 +57,8 @@ void switch_input(FILE *fp, FILE *fp_d, int *line_delta)
             //printf("\n");
             break;
         case ack:
-            char cmd_temp[buffer_size] = "ack ";
+            char cmd_temp[buffer_size] ;
+            strncpy(cmd_temp,"ack ",strlen("ack "));
             strcat(cmd_temp, search_word);
             strcat(cmd_temp, " ");
             strcat(cmd_temp, search_path);
