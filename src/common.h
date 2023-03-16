@@ -74,6 +74,13 @@ void print_deleteList(FILE *fp, int st_line, int end_line)
     fprintf(fp, "\n");
 }
 
+void print_deleteFile(FILE *fp,char * filename)
+{
+    fprintf(fp, "sed file '%s' ", filename);
+    
+    fprintf(fp, "\n");
+}
+
 void acknowledge()
 {
     printf("\033[32m\nDelete multiple lines is asynchronous, flushing and reloading by design!\n");        // green

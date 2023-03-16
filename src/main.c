@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
     strftime(temp, sizeof(temp), "deletedLog/deleteList_%Y-%m-%d_%H-%M-%S.log", timenow);
     char *path = temp;
     fp_deleteLog = fopen(path, "w");
-
+ 
     FILE *fp_search = fopen("searchLog/searchList.log", "r+");
     FILE *fp_deleteList = fopen("deleteList.sh", "w+");
     openfile_check(fp_search);

@@ -10,9 +10,6 @@ void openfile_check(FILE *fp)
     }
 }
 
-
-
-
 void ack_searchtoFile()
 {
     char cmd_temp[buffer_size] = "ack ";
@@ -23,7 +20,6 @@ void ack_searchtoFile()
     char *cmd_ack = cmd_temp;
     system(cmd_ack);
 }
-
 
 void welcome()
 {

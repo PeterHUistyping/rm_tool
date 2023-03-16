@@ -9,6 +9,7 @@ enum op
     vim,
     delete_multiple,
     ack,
+    delete_file,
     linux_cmd,
     First = exit_switch,
     Last = linux_cmd,
@@ -29,20 +30,31 @@ void switch_input(FILE *fp, FILE *fp_d, int *line_delta)
         printf("%d [Vim]\n", vim);
         printf("%d [DELETE Mul lines]\n", delete_multiple);
         printf("%d [ack search]\n", ack);
+        printf("%d [DELETE File]\n",delete_file);
         printf("%d [Any other linux command on cwd]", linux_cmd);
         printf("     INPUT[0-%d]:", Last);
         scanf("%d", &operation);
         switch (operation)
         {
-        case linux_cmd:
+        case delete_file:
             flush_delete(fp, fp_d, line_delta);
+            char cmd_tem[buffer_size] = "sudo rm -f ";
+            strcat(cmd_tem, filename_last);
+            system(cmd_tem);
+            print_deleteFile(fp_deleteLog,filename_last);
+            break;
+        case linux_cmd: 
+            flush_delete(fp, fp_d, line_delta);
+            printf("rm_tool:$sudo rm -r ../test        [Example]\n");
             printf("%s:$", "rm_tool");
-
             char temp[buffer_size];
-            scanf("%s", temp);
-            printf("\n");
+            int i=0;
+            getchar();
+            fgets(temp, sizeof(temp), stdin);
+            //printf("\n");
+        
             system(temp);
-            printf("\n");
+            //printf("\n");
             break;
         case ack:
             char cmd_temp[buffer_size] = "ack ";
