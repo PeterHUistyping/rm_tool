@@ -20,6 +20,7 @@ char search_path[buffer_size];
 char search_word[buffer_size];
 FILE *fp_deleteLog;
 void acknowledge();
+bool has_delete=false;
 void flush_delete(FILE *fp, FILE *fp_d, int *line_delta)
 {
     acknowledge();
@@ -46,6 +47,9 @@ void flush_delete(FILE *fp, FILE *fp_d, int *line_delta)
 }
 void flush_updateSearch()
 {
+    if(!has_delete){
+        return;
+    }
     system("> searchLog/searchList.log");
     char cmd_temp[buffer_size] = "ack ";
     strcat(cmd_temp, search_word);
@@ -55,6 +59,7 @@ void flush_updateSearch()
     char *cmd_ack = cmd_temp;
     system(cmd_ack);
     // system("ack pixel ../test > ");
+    has_delete=false;
 }
 
 
@@ -66,6 +71,7 @@ void print_singledeleteList(FILE *fp, int st_line)
         fprintf(fp, "%c", current_line[i]);
     }
     fprintf(fp, "\n");
+    has_delete=true;
 }
 
 void print_deleteList(FILE *fp, int st_line, int end_line)
@@ -76,6 +82,7 @@ void print_deleteList(FILE *fp, int st_line, int end_line)
         fprintf(fp, "%c", current_line[i]);
     }
     fprintf(fp, "\n");
+    has_delete=true;
 }
 
 void print_deleteFile(FILE *fp,char * filename)
@@ -83,6 +90,7 @@ void print_deleteFile(FILE *fp,char * filename)
     fprintf(fp, "sed file '%s' ", filename);
     
     fprintf(fp, "\n");
+    has_delete=true;
 }
 
 void acknowledge()
