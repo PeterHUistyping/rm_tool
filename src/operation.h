@@ -54,8 +54,8 @@ void switch_input(FILE *fp, FILE *fp_d, int *line_delta)
             getchar();
             fgets(temp, sizeof(temp), stdin);
             //printf("\n");
-        
             system(temp);
+            flush_updateSearch();
             //printf("\n");
             break;
         case ack:
