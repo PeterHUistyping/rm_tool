@@ -28,15 +28,7 @@ void flush_delete(FILE *fp, FILE *fp_d, int *line_delta)
 
     system("bash deleteList.sh");
     system("echo # flushed > deleteList.sh");
-    system("> searchLog/searchList.log");
-    char cmd_temp[buffer_size] = "ack ";
-    strcat(cmd_temp, search_word);
-    strcat(cmd_temp, " ");
-    strcat(cmd_temp, search_path);
-    strcat(cmd_temp, " > ./searchLog/searchList.log");
-    char *cmd_ack = cmd_temp;
-    system(cmd_ack);
-    // system("ack pixel ../test > ");
+    
     *line_delta = 0;
     rewind(fp);
     system("echo "" > deleteList.sh");
@@ -51,6 +43,18 @@ void flush_delete(FILE *fp, FILE *fp_d, int *line_delta)
     // strftime(temp, sizeof(temp), "deletedLog/deleteList_%Y-%m-%d_%H-%M-%S.log", timenow);
     // char *path = temp;
     // execl("/usr/bin/cp","/usr/bin/cp","deleteList.sh",path,NULL)
+}
+void flush_updateSearch()
+{
+    system("> searchLog/searchList.log");
+    char cmd_temp[buffer_size] = "ack ";
+    strcat(cmd_temp, search_word);
+    strcat(cmd_temp, " ");
+    strcat(cmd_temp, search_path);
+    strcat(cmd_temp, " > ./searchLog/searchList.log");
+    char *cmd_ack = cmd_temp;
+    system(cmd_ack);
+    // system("ack pixel ../test > ");
 }
 
 
