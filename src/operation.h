@@ -81,6 +81,7 @@ void switch_input(FILE *fp, FILE *fp_d, int *line_delta)
             scanf("%d", &end_line);
             print_deleteList(fp_deleteLog, st_line, end_line);
             print_deleteList(fp_d, st_line, end_line);
+            flush_delete(fp, fp_d, line_delta);
             flush_updateSearch();
             break;
         case exit_switch:
