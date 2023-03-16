@@ -102,7 +102,7 @@ void flush_delete(FILE *fp,FILE *fp_d,int* line_delta){
     // system("ack pixel ../test > ");   
     *line_delta=0;
     system("echo Flushed!");  
-    // fp=freopen("","w",fp);  
+    fp=freopen("","w",fp);   // reopen to flush everything
     rewind(fp);   
     //execl("/usr/bin/bash","/usr/bin/bash","deleteList.sh",NULL);
     //execl("/usr/bin/echo","/usr/bin/echo","Hi",NULL);  
