@@ -308,6 +308,15 @@ void process_search_log(FILE *fp,FILE *fp_d){
     printf("Review %d searches\n",lines);
     rewind(fp);
 }
+void ack_searchtoFile(){
+    char cmd_temp[buffer_size]="ack "; 
+    strcat(cmd_temp, search_word);
+    strcat(cmd_temp, " ");
+    strcat(cmd_temp, search_path);
+    strcat(cmd_temp, " > ./searchLog/searchList.log");
+    char *cmd_ack = cmd_temp;                 
+    system(cmd_ack);     
+}
 void welcome(){
     printf("--- ****** --- WELCOME to USE rm_tool 2023:) --- ****** ---\n");
     printf("\n");
@@ -338,7 +347,7 @@ int main(int argc, char *argv[]){
     time_t now = time(NULL);
     timenow = gmtime(&now);
     welcome();
-
+    ack_searchtoFile();
     strftime(temp, sizeof(temp), "deletedLog/deleteList_%Y-%m-%d_%H-%M-%S.log", timenow);  
     char *path = temp;
     fp_deleteLog= fopen(path,"w");

@@ -4,29 +4,46 @@ DEL_DIR=deletedLog
 searchLog_DIR=searchLog
 option1=default_warning
 # ./intro.sh $@
-
+bold=$(tput bold)
+normal=$(tput sgr0)
 if [ -z "$1" ]
 then
     echo "No argument supplied! Use -h to view usage."
     exit 1
 fi
 if [ "$#" -eq 1 ]; then
-while getopts ":h" opt; do
+while getopts ":hitwd" opt; do
   case $opt in
     h)
-        echo "Usage ./rm.sh -p ../test -w pixel [-d]" >&2
-        echo "              -p PATH -w SEARCH_WORD [-d]" >&2
-        echo "                      e.g. -p ../test -w pixel [-d]" >&2
-        echo "              -d together with -p -w to disable warning" >&2
-        echo "              -t NUM for dev and test" >&2
-        echo "                   Choice:" >&2
-        echo "                      -t 1 is -p ../test -w pixel -d" >&2
-        echo "                      -t 2 is -p ../test -w pixel " >&2
-        echo "              -h display this help and exit" >&2
+        echo "Usage   ./rm.sh SEARCH_WORD PATH  [-d]" >&2
+        echo "           e.g. pixel     ../test [-d]" >&2
+        echo "Same as ./rm.sh -w SEARCH_WORD -p PATH    [-d]" >&2
+        echo "           e.g. -w pixel       -p ../test [-d]" >&2
+        echo "   " >&2
+        echo "        Optional:" >&2
+        echo "                -d        together with -p -w to disable warning" >&2
+        echo "        Others:" >&2
+        echo "                -i        initialize & *clean* log " >&2
+        echo "                -h        display this help and exit" >&2
+        echo "                -t NUM    for dev and test" >&2
+        echo "        Choice:" >&2
+        echo "                  -t 1 is -w pixel -p ../test -d" >&2
+        echo "                  -t 2 is -w pixel -p ../test" >&2
+        
         exit 1
     ;;
-  
-   
+    i) 
+        ./init.sh
+        exit 1;;
+    t)
+        echo Missing operand. Use -h to view usage.
+        exit 1;;
+    w)
+        echo Missing operand. Use -h to view usage.
+        exit 1;;
+    d)
+        echo Missing operand. Use -h to view usage.
+        exit 1;;
     \?)
       echo "Invalid option: -$OPTARG. Use -h to view usage." >&2
       exit 1
@@ -39,41 +56,49 @@ while getopts ":t:" opt; do
   case $opt in
     t)
         args="$OPTARG"
+        echo Test $args
+        case $args in 
+        1)
+            path=../test 
+            word=pixel
+            option1=disable_warning
+        ;;
+        2) 
+            path=../test 
+            word=pixel
+        ;;
+        esac
     ;;   
     \?)
       echo "Invalid option: -$OPTARG. Use -h to view usage." >&2
       exit 1
-      ;;
+       
+    ;;
     esac
     case $OPTARG in
         -*)
             echo "Invalid option: -$OPTARG. Use -h to view usage." >&2
         exit 1
-        ;;
+         
+    ;;
     esac
 done
-    echo Test $args
-    case $args in 
-    1)
-        path=../test 
-        word=pixel
-        option1=disable_warning
-    ;;
-    2) 
-        path=../test 
-        word=pixel
-    ;;
-    esac
-
+    word=$1       
+    path=$2
+fi
+if [ "$#" -eq 3 ]; then
+    word=$1       
+    path=$2
+    option1=disable_warning
 fi
 if [ "$#" -eq 4 ]; then
-while getopts ":p:w:" opt; do
+while getopts ":w:p:" opt; do
     case $opt in
-        p)
-            path="$OPTARG"
-        ;;
         w)
             word="$OPTARG" 
+        ;;
+         p)
+            path="$OPTARG"
         ;;
         \?)
         echo "Invalid option: -$opt. Use -h to view usage." >&2
@@ -89,13 +114,13 @@ while getopts ":p:w:" opt; do
 done 
 fi
 if [ "$#" -eq 5 ]; then
-while getopts ":p:w:d" opt; do
+while getopts ":w:p:d" opt; do
     case $opt in
-        p)
-            path="$OPTARG"
-        ;;
         w)
             word="$OPTARG" 
+        ;;
+        p)
+            path="$OPTARG"
         ;;
         d)  option1=disable_warning
         ;;
@@ -112,8 +137,12 @@ while getopts ":p:w:d" opt; do
     esac  
 done 
 fi
-echo searching {$word} in path [$path] with $option1
 
+printf "%s " "--- ****** --- WELCOME to USE rm_tool 2023:) --- ****** ---"
+echo 
+echo Searching ${bold}{$word}${normal} in path ${bold}[$path]${normal} with ${bold}$option1${normal}
+printf "%s " "Press enter to continue if the above are all correct "
+read ans
 if ! [ -d "$searchLog_DIR" ]; then 
     mkdir searchLog 
 fi
@@ -124,7 +153,7 @@ fi
 # do
 # ...
 # done
-ack pixel ../test > ./searchLog/searchList.log
+# ack pixel ../test > ./searchLog/searchList.log
 
 echo ------ rm the previous build  ------
 rm -rf build

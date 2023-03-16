@@ -17,6 +17,8 @@ chmod +x ./test/reset_test.sh
 chmod +x ./change_r.sh
 ./test/reset_test.sh
 ./change_r.sh
-sudo  chmod -R 777  test
-sudo cp -f -r test ../
+sudo chmod -R 777  test
+sudo chmod -R 777  backup_test
+sudo cp -f backup_test/* ../test
+sudo cp -f backup_test/* test/
 sudo chmod -R 777 ../test

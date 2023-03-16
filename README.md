@@ -10,21 +10,16 @@ Place this repo at the same directory as your working_folder (to be cleaned and 
 ```
 ### Initiate the tools needed
 ```
-./init.h
+./rm.sh -i
+or
+./init.h 
 ```
 Install the tools needed and have test sets updated.
 ### Usage
 ```
 ./rm.sh -h
-Usage ./rm.sh   -p ../test -w pixel [-d] 
-                -p PATH -w SEARCH_WORD [-d] 
-                        e.g. -p ../test -w pixel [-d] 
-                -d together with -p -w to disable warning 
-                -t NUM for dev and test 
-                    Choice: 
-                        -t 1 is -p ../test -w pixel -d 
-                        -t 2 is -p ../test -w pixel  
-                -h display this help and exit 
+Usage ./rm.sh ... 
+(See more using the above command.)
 ```
 ## Pipeline
 ack > search_res.log
