@@ -24,6 +24,9 @@ bool has_delete=false;
 void flush_delete(FILE *fp, FILE *fp_d, int *line_delta)
 {
     acknowledge();
+    if(!has_delete){
+        return;
+    }
     fflush(fp_d);
     fflush(fp);
 
