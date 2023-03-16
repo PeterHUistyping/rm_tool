@@ -143,7 +143,7 @@ cd ..
 
 echo ---Starting to delete unused code---
 
-chmod +777 deleteLish.sh
+chmod +777 deleteList.sh
 ./deleteList.sh
 
 
