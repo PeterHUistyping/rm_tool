@@ -1,9 +1,11 @@
+p=test/install.log
 echo Start to install tools needed
-sudo apt install rename -y
-sudo apt install sed -y
-sudo apt install ack -y
-sudo apt install vim -y
-sudo apt install cmake -y
+echo Install log has been written to $p
+sudo apt-get install rename -y >> $p
+sudo apt-get install sed -y >> $p
+sudo apt-get install ack -y >> $p
+sudo apt-get install vim -y >> $p
+sudo apt-get install cmake -y >> $p
 echo Install done!
 chmod +x ./test/reset_test.sh
 chmod +x ./change_r.sh
