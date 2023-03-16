@@ -37,7 +37,7 @@ void flush_delete(FILE *fp, FILE *fp_d, int *line_delta)
     *line_delta = 0;
     rewind(fp);
     system("echo "" > deleteList.sh");
-    system("echo Flushed!");
+    system("echo Flushed deleteList!");
 
     // fclose(fp);
     // fp=freopen("","w",fp);   // reopen to flush everything
@@ -60,6 +60,7 @@ void flush_updateSearch()
     strcat(cmd_temp, " ");
     strcat(cmd_temp, search_path);
     strcat(cmd_temp, " > ./searchLog/searchList.log");
+    system("echo Flushed searchList!");
     char *cmd_ack = cmd_temp;
     system(cmd_ack);
     // system("ack pixel ../test > ");
