@@ -4,6 +4,8 @@ sudo apt install sed -y
 sudo apt install ack -y
 sudo apt install vim -y
 echo Install done!
+chmod +x ./test/reset_test.sh
+chmod +x ./change_r.sh
 ./test/reset_test.sh
 ./change_r.sh
 cp -r test ../
