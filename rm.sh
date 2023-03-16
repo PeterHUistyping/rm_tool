@@ -144,6 +144,7 @@ cd ..
 echo ---Starting to delete unused code---
 
 ./deleteList.sh
+chmod +777 ./deleteList.sh
 
 mv searchLog/searchList.log  searchLog/searchList_`date +%Y_%m_%d_%H-%M-%S`.log
 # mv deleteList.sh ./deletedLog/deleteList_`date +%Y_%m_%d_%H-%M-%S`.log
