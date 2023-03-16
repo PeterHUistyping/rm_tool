@@ -1,5 +1,6 @@
 # rm_tool Linxu
 Integration of search, view and delete using Linux System Call ack, vim and sed.
+In addition, there are others system calls integrated, like clear screen.
 ![del_single](./del_single.png)
 Make use of enum, switch, file handling in C, system call.
 ## How to Use
@@ -11,8 +12,6 @@ Place this repo at the same directory as your working_folder (to be cleaned and 
 ### Initiate the tools needed
 ```
 ./rm.sh -i
-or
-./init.h 
 ```
 Install the tools needed and have test sets updated.
 ### Usage

@@ -8,23 +8,28 @@ bold=$(tput bold)
 normal=$(tput sgr0)
 if [ -z "$1" ]
 then
-    echo "No argument supplied! Use -h to view usage."
+    echo "No argument supplied! Use ./rm.sh -h to view usage."
     exit 1
 fi
 if [ "$#" -eq 1 ]; then
-while getopts ":hitwd" opt; do
+while getopts ":hitwdec" opt; do
   case $opt in
     h)
+        echo "Quick start  ./rm.sh -i (initializing & *clean*ing log)" >&2
+        echo "             ./rm.sh pixel ../test [-d]" >&2
+         echo "   " >&2
         echo "Usage   ./rm.sh SEARCH_WORD PATH  [-d]" >&2
         echo "           e.g. pixel     ../test [-d]" >&2
         echo "Same as ./rm.sh -w SEARCH_WORD -p PATH    [-d]" >&2
         echo "           e.g. -w pixel       -p ../test [-d]" >&2
-        echo "   " >&2
         echo "        Optional:" >&2
         echo "                -d        together with -p -w to disable warning" >&2
+         echo "   " >&2
         echo "        Others:" >&2
         echo "                -i        initialize & *clean* log " >&2
+        echo "                -e        show the last time debug log " >&2
         echo "                -h        display this help and exit" >&2
+        echo "                -c        clear screen" >&2
         echo "                -t NUM    for dev and test" >&2
         echo "        Choice:" >&2
         echo "                  -t 1 is -w pixel -p ../test -d" >&2
@@ -33,19 +38,25 @@ while getopts ":hitwd" opt; do
         exit 1
     ;;
     i) 
-        ./init.sh
+        ./shell/init.sh
+        exit 1;;
+    e)
+        ./shell/debug.sh
         exit 1;;
     t)
-        echo Missing operand. Use -h to view usage.
+        echo Missing operand. Use ./rm.sh -h to view usage.
+        exit 1;;
+    c)
+        clear
         exit 1;;
     w)
-        echo Missing operand. Use -h to view usage.
+        echo Missing operand. Use ./rm.sh -h to view usage.
         exit 1;;
     d)
-        echo Missing operand. Use -h to view usage.
+        echo Missing operand. Use ./rm.sh -h to view usage.
         exit 1;;
     \?)
-      echo "Invalid option: -$OPTARG. Use -h to view usage." >&2
+      echo "Invalid option: -$OPTARG. Use ./rm.sh -h to view usage." >&2
       exit 1
       ;;
   esac
@@ -70,14 +81,14 @@ while getopts ":t:" opt; do
         esac
     ;;   
     \?)
-      echo "Invalid option: -$OPTARG. Use -h to view usage." >&2
+      echo "Invalid option: -$OPTARG. Use ./rm.sh -h to view usage." >&2
       exit 1
        
     ;;
     esac
     case $OPTARG in
         -*)
-            echo "Invalid option: -$OPTARG. Use -h to view usage." >&2
+            echo "Invalid option: -$OPTARG. Use ./rm.sh -h to view usage." >&2
         exit 1
          
     ;;
@@ -101,13 +112,13 @@ while getopts ":w:p:" opt; do
             path="$OPTARG"
         ;;
         \?)
-        echo "Invalid option: -$opt. Use -h to view usage." >&2
+        echo "Invalid option: -$opt. Use ./rm.sh -h to view usage." >&2
         exit 1
         ;;
     esac
     case $OPTARG in
         -*)
-            echo "Invalid option: -$OPTARG. Use -h to view usage." >&2
+            echo "Invalid option: -$OPTARG. Use ./rm.sh -h to view usage." >&2
         exit 1
         ;;
     esac  
@@ -125,13 +136,13 @@ while getopts ":w:p:d" opt; do
         d)  option1=disable_warning
         ;;
         \?)
-        echo "Invalid option: -$opt. Use -h to view usage." >&2
+        echo "Invalid option: -$opt. Use ./rm.sh -h to view usage." >&2
         exit 1
         ;;
     esac
     case $OPTARG in
         -*)
-            echo "Invalid option: -$OPTARG. Use -h to view usage." >&2
+            echo "Invalid option: -$OPTARG. Use ./rm.sh -h to view usage." >&2
         exit 1
         ;;
     esac  

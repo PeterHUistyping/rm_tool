@@ -14,9 +14,9 @@ if ! [ -d "$test" ]; then
 fi
 
 chmod +x ./test/reset_test.sh
-chmod +x ./change_r.sh
+chmod +x shell/change_r.sh
 ./test/reset_test.sh
-./change_r.sh
+./shell/change_r.sh
 sudo chmod -R 777  test
 sudo chmod -R 777  backup_test
 sudo cp -f backup_test/* ../test
