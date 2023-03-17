@@ -119,6 +119,6 @@ void process_search_log(FILE *fp, FILE *fp_d)
         ++lines;
 
     printf("Max_len of the a line is %d \n", max_len);
-    printf("Review %d searches\n", lines);
+    printf("Review %d files, %d searches\n",--loop_fileid, lines);
     rewind(fp);
 }
