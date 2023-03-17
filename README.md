@@ -37,12 +37,16 @@ generate deletedLog with timestamp.
 ## Choice：
 1. skip
 2. rm variable/single line <br/>
-    No need to flush, since it's restricted to a subset of lines.
+    v1:No need to flush, since it's restricted to a subset of lines.
+
+    v2: Direct flushing, enabling multiple choices
 3. vim  <br/>
     flush -> redo ack search
 4. rm specific lines  <br/>
-    Delete Multiple Lines is asynchronous, it will trigger flush and reload by design <br/>
+    v1: Delete Multiple Lines is asynchronous, it will trigger flush and reload by design <br/>
     ADD acknowledge confirmation, and could AVOID future warning by using variable  bool future_acknowledge=true; <br/>
+
+    v2: No need to flush deleteList this time.
 5. ack
 6. rm file
 7. rm function
