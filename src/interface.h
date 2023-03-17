@@ -14,7 +14,6 @@ void process_search_log(FILE *fp, FILE *fp_d)
     bool second_colon = false;
     bool first_hit_colon = true;
     bool same_file = false;
-    int line_delta = 0;
     char filename_delete[buffer_size];
 
     printf("\033[1m--------------------------------rm id: %d file:%d--------------------------------\n", loop_id++, loop_fileid);
@@ -35,7 +34,6 @@ void process_search_log(FILE *fp, FILE *fp_d)
                     }
                     else
                     { // new file
-                        line_delta = 0;
                         loop_id = 1;
                         loop_fileid++;
                     }
@@ -76,8 +74,7 @@ void process_search_log(FILE *fp, FILE *fp_d)
                     
                 }
                 current_line_num[temp_i++] = '\0';
-                printf("Real: %d",line_int-line_delta);
-                printf("Cache: %d", line_int);
+                printf("%d",line_int);
                 // printf("| (range of len: %d-%d), \n \n",first_colon_len,len);
                 printf("| \n \n");
                 second_colon = false;
@@ -94,7 +91,7 @@ void process_search_log(FILE *fp, FILE *fp_d)
             }
             printf("\n");
 
-            switch_input(fp, fp_d, &line_delta);
+            switch_input(fp, fp_d);
 
             if (max_len < len)
                 max_len = len;

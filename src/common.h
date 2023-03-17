@@ -22,7 +22,7 @@ FILE *fp_deleteLog;
 void acknowledge();
 bool has_delete=false;
 bool has_flush=false;
-void flush_delete( FILE *fp_d, int *line_delta)
+void flush_delete( FILE *fp_d)
 {
     acknowledge();
     if(!has_delete){
@@ -35,8 +35,7 @@ void flush_delete( FILE *fp_d, int *line_delta)
     has_delete=false;
     
     system("echo # flushed > deleteList.sh");
-    
-    *line_delta = 0;
+ 
     
     system("echo "" > deleteList.sh");
     system("echo Flushed deleteList!");
@@ -108,8 +107,8 @@ void print_deleteFile(FILE *fp,char * filename)
 
 void acknowledge()
 {
-    printf("\033[32m\nThis operation could lead to asynchronous result, flushing and reloading by design!\n");        // green
-    printf("\033[0mPlease wait until the program is reloading and processing the deletion, thanks! \n"); // black
+    printf("\033[32m\nReady to Delete it!\n");        // green
+    printf("\033[0mPlease wait until the program is flushing, reloading search list and processing the deletion, thanks! \n"); // black
     if (future_acknowledge)
     {
         printf("\033[0mType ANY letter to confirm acknowledge: "); // black

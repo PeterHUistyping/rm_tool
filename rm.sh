@@ -169,7 +169,7 @@ fi
 # ack pixel ../test > ./searchLog/searchList.log
 
 echo ------ rm the previous build  ------
-rm -rf build
+sudo rm -rf build
 mkdir build
 cd build
 

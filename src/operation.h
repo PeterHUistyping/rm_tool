@@ -28,7 +28,7 @@ void pr_menu(){
     printf("%d [Any other linux command on cwd]", linux_cmd);
     printf("     INPUT[0-%d]:", Last);
 }
-void switch_input(FILE *fp, FILE *fp_d, int *line_delta)
+void switch_input(FILE *fp, FILE *fp_d)
 {
     int operation = 0;
     int st_line, end_line;
@@ -51,8 +51,6 @@ void switch_input(FILE *fp, FILE *fp_d, int *line_delta)
             first=true;
             break;
         case ack: //read 
-            flush_delete( fp_d, line_delta);
-            flush_updateSearch(fp);
             {char cmd_temp[buffer_size]="ack ";     
             strcat(cmd_temp, search_word);
             strcat(cmd_temp, " ");
@@ -64,8 +62,6 @@ void switch_input(FILE *fp, FILE *fp_d, int *line_delta)
             system(cmd_ack);}
             break;
         case vim: //read
-            flush_delete( fp_d, line_delta);
-            flush_updateSearch(fp);
             printf("\033[32m[Vim] Well received!\n"); // red
             printf("\033[0m\n");                      // black
             // pid_t childPid = fork();
@@ -91,7 +87,6 @@ void switch_input(FILE *fp, FILE *fp_d, int *line_delta)
             //}
             break;
                 case delete_file:
-            flush_delete(fp_d, line_delta);
             {char cmd_tem[buffer_size] = "sudo rm -f ";
             strcat(cmd_tem, filename_last);
             system(cmd_tem);
@@ -99,8 +94,6 @@ void switch_input(FILE *fp, FILE *fp_d, int *line_delta)
             flush_updateSearch(fp);
             break;
         case linux_cmd: //read write
-            flush_delete( fp_d, line_delta);
-            flush_updateSearch(fp);
             printf("rm_tool:$sudo rm -r ../test        [Example]\n");
             printf("%s:$", "rm_tool");
             char temp[buffer_size];
@@ -113,7 +106,6 @@ void switch_input(FILE *fp, FILE *fp_d, int *line_delta)
             //printf("\n");
             break;
         case delete_multiple: //write
-            flush_delete( fp_d, line_delta);
             printf("\033[31m[DELETE Mul lines] Well received!\n"); // red
             printf("\033[0m\n");                                   // black
             printf("\033[1mPlease enter the start line for deletion:\n");
@@ -123,15 +115,16 @@ void switch_input(FILE *fp, FILE *fp_d, int *line_delta)
             scanf("%d", &end_line);
             print_deleteList(fp_deleteLog, st_line, end_line);
             print_deleteList(fp_d, st_line, end_line);
-            flush_delete( fp_d, line_delta);
+            flush_delete(fp_d);
             flush_updateSearch(fp);
             break;
         case delete_single: //cache
             printf("\033[31m[DELETE single line] Well received!\n"); // red
             printf("\033[0m\n");                                     // black
-            print_singledeleteList(fp_d, line_int - *line_delta);
-            print_singledeleteList(fp_deleteLog, line_int - *line_delta);
-            *line_delta += 1;
+            print_singledeleteList(fp_d, line_int );
+            print_singledeleteList(fp_deleteLog, line_int );
+            flush_delete(fp_d);
+            flush_updateSearch(fp);
             break;
         case exit_switch:
             printf("\033[32m[EXIT and Flush] Well received!\n"); // green
