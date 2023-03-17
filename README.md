@@ -1,4 +1,4 @@
-# rm_tool Linxu
+# rm_tool Linux
 Integration of search, view and delete using Linux System Call ack, vim and sed.
 
 Full support of ANY ack command!
