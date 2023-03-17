@@ -71,8 +71,9 @@ void process_search_log(FILE *fp, FILE *fp_d)
                 for (int i = first_colon_len; i < len; i++)
                 {
                     line_int = line_int * 10 + current_line[i] - '0';
-                    printf("%c", current_line[i]);
+                    //printf("%c", current_line[i]);
                     current_line_num[temp_i++] = current_line[i];
+                    printf("%d",line_int-line_delta);
                 }
                 current_line_num[temp_i++] = '\0';
                 printf(" %d", line_int);
