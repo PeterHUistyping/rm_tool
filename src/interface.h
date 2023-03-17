@@ -73,10 +73,11 @@ void process_search_log(FILE *fp, FILE *fp_d)
                     line_int = line_int * 10 + current_line[i] - '0';
                     //printf("%c", current_line[i]);
                     current_line_num[temp_i++] = current_line[i];
-                    printf("%d",line_int-line_delta);
+                    
                 }
                 current_line_num[temp_i++] = '\0';
-                printf(" %d", line_int);
+                printf("Real:%d",line_int-line_delta);
+                printf("Cache: %d", line_int);
                 // printf("| (range of len: %d-%d), \n \n",first_colon_len,len);
                 printf("| \n \n");
                 second_colon = false;
