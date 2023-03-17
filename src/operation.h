@@ -140,7 +140,7 @@ void switch_input(FILE *fp, FILE *fp_d)
             printf("\033[0m\n");                                                             // black
         }
 
-        if( operation == exit_switch || operation == skip|| operation == delete_single|| operation == delete_file)
+        if( operation == exit_switch || operation == skip|| operation == delete_single|| operation == delete_multiple||operation == delete_file)
         {
             break;
         }
