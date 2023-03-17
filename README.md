@@ -47,5 +47,6 @@ generate deletedLog with timestamp.
 6. rm file
 7. rm function
 
+Determine whether or not to flush deleteList and searchList depend on the properties of the function, whether it will read / write the state.
 
 cd /mnt/d/Work/Tools/rm_tool

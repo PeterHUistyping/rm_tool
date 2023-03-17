@@ -47,34 +47,13 @@ void switch_input(FILE *fp, FILE *fp_d, int *line_delta)
         scanf("%d", &operation);
         switch (operation)
         {
-        case menu:
+        case menu: //read 
             first=true;
             break;
-        case delete_file:
-            flush_delete(fp_d, line_delta);
-            {char cmd_tem[buffer_size] = "sudo rm -f ";
-            strcat(cmd_tem, filename_last);
-            system(cmd_tem);
-            print_deleteFile(fp_deleteLog,filename_last);}
-            flush_updateSearch(fp);
-            break;
-        case linux_cmd: 
+        case ack: //read 
             flush_delete( fp_d, line_delta);
             flush_updateSearch(fp);
-            printf("rm_tool:$sudo rm -r ../test        [Example]\n");
-            printf("%s:$", "rm_tool");
-            char temp[buffer_size];
-            int i=0;
-            getchar();
-            fgets(temp, sizeof(temp), stdin);
-            //printf("\n");
-            system(temp);
-            flush_updateSearch(fp);
-            //printf("\n");
-            break;
-        case ack:
-            {char cmd_temp[buffer_size]="ack ";
-            
+            {char cmd_temp[buffer_size]="ack ";     
             strcat(cmd_temp, search_word);
             strcat(cmd_temp, " ");
             strcat(cmd_temp, search_path);
@@ -84,37 +63,7 @@ void switch_input(FILE *fp, FILE *fp_d, int *line_delta)
             // }
             system(cmd_ack);}
             break;
-        case delete_multiple:
-            flush_delete( fp_d, line_delta);
-            printf("\033[31m[DELETE Mul lines] Well received!\n"); // red
-            printf("\033[0m\n");                                   // black
-            printf("\033[1mPlease enter the start line for deletion:\n");
-            scanf("%d", &st_line);
-            printf("\033[1mPlease enter the last line for deletion:");
-            printf("\033[0m\n"); // black
-            scanf("%d", &end_line);
-            print_deleteList(fp_deleteLog, st_line, end_line);
-            print_deleteList(fp_d, st_line, end_line);
-            flush_delete( fp_d, line_delta);
-            flush_updateSearch(fp);
-            break;
-        case exit_switch:
-            printf("\033[32m[EXIT and Flush] Well received!\n"); // green
-            printf("\033[0m\n");                                 // black
-            exit_loop = true;
-            break;
-        case skip:
-            printf("\033[32m[SKIP] Well received!\n"); // green
-            printf("\033[0m\n");                       // black
-            break;
-        case delete_single:
-            printf("\033[31m[DELETE single line] Well received!\n"); // red
-            printf("\033[0m\n");                                     // black
-            print_singledeleteList(fp_d, line_int - *line_delta);
-            print_singledeleteList(fp_deleteLog, line_int - *line_delta);
-            *line_delta += 1;
-            break;
-        case vim:
+        case vim: //read
             flush_delete( fp_d, line_delta);
             flush_updateSearch(fp);
             printf("\033[32m[Vim] Well received!\n"); // red
@@ -141,18 +90,69 @@ void switch_input(FILE *fp, FILE *fp_d, int *line_delta)
             // execl("/usr/bin/vim","/usr/bin/vim",lines_,path,NULL);
             //}
             break;
-
+                case delete_file:
+            flush_delete(fp_d, line_delta);
+            {char cmd_tem[buffer_size] = "sudo rm -f ";
+            strcat(cmd_tem, filename_last);
+            system(cmd_tem);
+            print_deleteFile(fp_deleteLog,filename_last);}
+            flush_updateSearch(fp);
+            break;
+        case linux_cmd: //read write
+            flush_delete( fp_d, line_delta);
+            flush_updateSearch(fp);
+            printf("rm_tool:$sudo rm -r ../test        [Example]\n");
+            printf("%s:$", "rm_tool");
+            char temp[buffer_size];
+            int i=0;
+            getchar();
+            fgets(temp, sizeof(temp), stdin);
+            //printf("\n");
+            system(temp);
+            flush_updateSearch(fp);
+            //printf("\n");
+            break;
+        case delete_multiple: //write
+            flush_delete( fp_d, line_delta);
+            printf("\033[31m[DELETE Mul lines] Well received!\n"); // red
+            printf("\033[0m\n");                                   // black
+            printf("\033[1mPlease enter the start line for deletion:\n");
+            scanf("%d", &st_line);
+            printf("\033[1mPlease enter the last line for deletion:");
+            printf("\033[0m\n"); // black
+            scanf("%d", &end_line);
+            print_deleteList(fp_deleteLog, st_line, end_line);
+            print_deleteList(fp_d, st_line, end_line);
+            flush_delete( fp_d, line_delta);
+            flush_updateSearch(fp);
+            break;
+        case delete_single: //cache
+            printf("\033[31m[DELETE single line] Well received!\n"); // red
+            printf("\033[0m\n");                                     // black
+            print_singledeleteList(fp_d, line_int - *line_delta);
+            print_singledeleteList(fp_deleteLog, line_int - *line_delta);
+            *line_delta += 1;
+            break;
+        case exit_switch:
+            printf("\033[32m[EXIT and Flush] Well received!\n"); // green
+            printf("\033[0m\n");                                 // black
+            exit_loop = true;
+            break;
+        case skip:
+            printf("\033[32m[SKIP] Well received!\n"); // green
+            printf("\033[0m\n");                       // black
+            break;
         default:
             printf("\033[33mFailure, Invalid input: %d! Please retry or exit. ", operation); // yellow
             printf("\033[0m\n");                                                             // black
         }
-        if (operation > Last || operation < First|| operation == menu  || operation == vim || operation == ack || operation == delete_multiple || operation == linux_cmd)
-        {
-            continue;
-        }
-        else
+
+        if( operation == exit_switch || operation == skip|| operation == delete_single|| operation == delete_file)
         {
             break;
+        }
+        else{
+            continue;
         }
     }
 }
