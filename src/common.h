@@ -21,6 +21,7 @@ char search_word[buffer_size];
 FILE *fp_deleteLog;
 void acknowledge();
 bool has_delete=false;
+bool has_flush=false;
 void flush_delete( FILE *fp_d, int *line_delta)
 {
     acknowledge();
@@ -32,6 +33,7 @@ void flush_delete( FILE *fp_d, int *line_delta)
 
     system("bash deleteList.sh");
     has_delete=false;
+    
     system("echo # flushed > deleteList.sh");
     
     *line_delta = 0;
@@ -51,7 +53,7 @@ void flush_delete( FILE *fp_d, int *line_delta)
 }
 void flush_updateSearch(FILE *fp)
 {
-    if(!has_delete){
+    if(!has_flush){
         return;
     }
     fflush(fp);
@@ -65,7 +67,8 @@ void flush_updateSearch(FILE *fp)
     char *cmd_ack = cmd_temp;
     rewind(fp);
     system(cmd_ack);
-
+    has_flush=true;
+    has_flush=true;
     // system("ack pixel ../test > ");
     
 }
@@ -80,6 +83,7 @@ void print_singledeleteList(FILE *fp, int st_line)
     }
     fprintf(fp, "\n");
     has_delete=true;
+    has_flush=true;
 }
 
 void print_deleteList(FILE *fp, int st_line, int end_line)
@@ -91,6 +95,7 @@ void print_deleteList(FILE *fp, int st_line, int end_line)
     }
     fprintf(fp, "\n");
     has_delete=true;
+    has_flush=true;
 }
 
 void print_deleteFile(FILE *fp,char * filename)

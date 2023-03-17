@@ -119,8 +119,6 @@ void switch_input(FILE *fp, FILE *fp_d, int *line_delta)
             flush_updateSearch(fp);
             printf("\033[32m[Vim] Well received!\n"); // red
             printf("\033[0m\n");                      // black
-            
-            
             // pid_t childPid = fork();
             // if (childPid) {
             // }
