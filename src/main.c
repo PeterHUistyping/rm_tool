@@ -4,12 +4,21 @@
 #include "interface.h"
 int main(int argc, char *argv[])
 {
-    if (argv[3][1] == 'i')
+    if (argv[argc-1][1] == 'i')
     {
         future_acknowledge = false;
     }
-    strncpy(search_path, argv[1], strlen(argv[1]));
-    strncpy(search_word, argv[2], strlen(argv[2]));
+
+    //     strncpy(search_path, argv[1], strlen(argv[1]));
+    //     strncpy(search_word, argv[2], strlen(argv[2]));
+    
+    strncpy(search_ack,"ack ", strlen("ack "));
+    for(int i=1;i<argc-1;i++){
+        strcat(search_ack, argv[i]);
+        strcat(search_ack, " ");
+    }
+ 
+    print_charArray(search_ack);
     char temp[buffer_size];
     struct tm *timenow;
     time_t now = time(NULL);

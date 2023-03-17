@@ -54,15 +54,13 @@ void switch_input(FILE *fp, FILE *fp_d)
             first=true;
             break;
         case ack: //read 
-            {char cmd_temp[buffer_size]="ack ";     
-            strcat(cmd_temp, search_word);
-            strcat(cmd_temp, " ");
-            strcat(cmd_temp, search_path);
-            char *cmd_ack = cmd_temp;
-            // for(int i=0;i<strlen(cmd_ack);i++){
-            //     printf("%c",cmd_ack[i]);
-            // }
-            system(cmd_ack);}
+            // {char cmd_temp[buffer_size]="ack ";     
+            // strcat(cmd_temp, search_word);
+            // strcat(cmd_temp, " ");
+            // strcat(cmd_temp, search_path);
+            // char *cmd_ack = cmd_temp;
+            print_charArray(search_ack);
+            system(search_ack);
             break;
         case vim: //read
             printf("\033[32m[Vim] Well received!\n"); // red

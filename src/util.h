@@ -12,12 +12,11 @@ void openfile_check(FILE *fp)
 
 void ack_searchtoFile()
 {
-    char cmd_temp[buffer_size] = "ack ";
-    strcat(cmd_temp, search_word);
-    strcat(cmd_temp, " ");
-    strcat(cmd_temp, search_path);
+    char cmd_temp[buffer_size] ;  
+    strncpy(cmd_temp,search_ack,strlen(search_ack));
     strcat(cmd_temp, " > ./searchLog/searchList.log");
-    char *cmd_ack = cmd_temp;
+    system("echo Flushed searchList!");
+    char * cmd_ack = cmd_temp;
     system(cmd_ack);
 }
 
@@ -64,4 +63,11 @@ void file_data(FILE *fp)
     printf("Max_len of the a line is %d \n", max_len);
     printf("Review %d searches\n", lines);
     rewind(fp);
+}
+
+void print_charArray(char * cmd_ack){
+    for(int i=0;i<strlen(cmd_ack);i++){
+        printf("%c",cmd_ack[i]);
+    }
+    printf("\n");
 }

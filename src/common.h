@@ -16,22 +16,19 @@ int first_colon_len = 0;
 int line_int = 0;
 bool exit_loop = false;
 bool future_acknowledge = true;
-char search_path[buffer_size];
-char search_word[buffer_size];
+// char search_path[buffer_size];
+// char search_word[buffer_size];
+char search_ackCmd=false;
+char search_ack[buffer_size];
 FILE *fp_deleteLog;
 void acknowledge();
-bool has_delete=false;
-bool has_flush=false;
 bool delete_file_idChange=false;
 void flush_delete( FILE *fp_d)
 {
     acknowledge();
     fflush(fp_d);
-    system("bash deleteList.sh");
-    has_delete=false;
-    
+    system("bash deleteList.sh");   
     system("echo # flushed > deleteList.sh");
- 
     
     system("echo "" > deleteList.sh");
     system("echo Flushed deleteList!");
@@ -50,17 +47,15 @@ void flush_updateSearch(FILE *fp)
 {
     fflush(fp);
     system("> searchLog/searchList.log");
-    char cmd_temp[buffer_size] = "ack ";
-    strcat(cmd_temp, search_word);
-    strcat(cmd_temp, " ");
-    strcat(cmd_temp, search_path);
+    
+ 
+    char cmd_temp[buffer_size] ;  
+    strncpy(cmd_temp,search_ack,strlen(search_ack));
     strcat(cmd_temp, " > ./searchLog/searchList.log");
     system("echo Flushed searchList!");
-    char *cmd_ack = cmd_temp;
+    char * cmd_ack = cmd_temp;
     rewind(fp);
-    system(cmd_ack);
-    has_flush=false;
-    // system("ack pixel ../test > ");    
+    system(cmd_ack); 
 }
 
 

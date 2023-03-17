@@ -3,7 +3,6 @@ BUILD_DIR=build
 DEL_DIR=deletedLog
 searchLog_DIR=searchLog
 option1=default_warning
-ack=false
 # ./intro.sh $@
 bold=$(tput bold)
 normal=$(tput sgr0)
@@ -18,21 +17,15 @@ while getopts ":hitwdec" opt; do
     h)
         echo "Quick start  ./rm.sh -i (initializing & *clean*ing log)" >&2
         echo "             ./rm.sh pixel ../test [-d]" >&2
-        echo "   " >&2
-
+         echo "   " >&2
         echo "Usage   ./rm.sh SEARCH_WORD PATH  [-d]" >&2
         echo "           e.g. pixel     ../test [-d]" >&2
-        echo "   " >&2
-
-        echo "Advanced ./rm.sh SEARCH_WORD PATH [Other ack cmd] [-d]" >&2
-        echo "           e.g. pixel     ../test -i [-d]" >&2
-        echo "                See more using ack --help" >&2
         echo "                                   enter tool searching the keyword provided" >&2
+        echo "Same as ./rm.sh -w SEARCH_WORD -p PATH    [-d]" >&2
+        echo "           e.g. -w pixel       -p ../test [-d]" >&2
         echo "        Optional:" >&2
-        echo "                -d                 appending ack cmd to disable warning" >&2
-        echo "                                   Caution: need to be the last one!" >&2
-        echo "   " >&2
-        
+        echo "                -d                 together with -p -w to disable warning" >&2
+         echo "   " >&2
         echo "        Others:" >&2
         echo "                -i  -init          initialize & *clean* log " >&2
         echo "                -e  -error         show the last time debug log " >&2
@@ -70,7 +63,6 @@ while getopts ":hitwdec" opt; do
   esac
 done
 fi
-
 if [ "$#" -eq 2 ]; then
     word=$1       
     path=$2
@@ -107,34 +99,61 @@ while getopts ":t:" opt; do
 done
 
 fi
-# if [ "$#" -eq 3 ]; then
-#     word=$1       
-#     path=$2
-#     option1=disable_warning
-# fi
-printf "%s " "--- ****** --- WELCOME to USE rm_tool 2023:) --- ****** ---"
-echo 
-
-if [ "$#" -ge 3 ]; then
+if [ "$#" -eq 3 ]; then
     word=$1       
     path=$2
-    # echo ${!#}
-    # echo $#
-    # echo ${@:$n:$#}
-    case ${!#} in # last
-    -d)  
-        # echo -d >&2 
-        option1=disable_warning
-    ;;
+    option1=disable_warning
+fi
+if [ "$#" -eq 4 ]; then
+while getopts ":w:p:" opt; do
+    case $opt in
+        w)
+            word="$OPTARG" 
+        ;;
+         p)
+            path="$OPTARG"
+        ;;
+        \?)
+        echo "Invalid option: -$opt. Use ./rm.sh -h to view usage." >&2
+        exit 1
+        ;;
     esac
-    echo Searching via Linux command: ack ${@:1:$#-1} with ${bold}$option1${normal}
-else
-    echo Searching ${bold}{$word}${normal} in path ${bold}[$path]${normal} with ${bold}$option1${normal}
-fi 
- 
+    case $OPTARG in
+        -*)
+            echo "Invalid option: -$OPTARG. Use ./rm.sh -h to view usage." >&2
+        exit 1
+        ;;
+    esac  
+done 
+fi
+if [ "$#" -eq 5 ]; then
+while getopts ":w:p:d" opt; do
+    case $opt in
+        w)
+            word="$OPTARG" 
+        ;;
+        p)
+            path="$OPTARG"
+        ;;
+        d)  option1=disable_warning
+        ;;
+        \?)
+        echo "Invalid option: -$opt. Use ./rm.sh -h to view usage." >&2
+        exit 1
+        ;;
+    esac
+    case $OPTARG in
+        -*)
+            echo "Invalid option: -$OPTARG. Use ./rm.sh -h to view usage." >&2
+        exit 1
+        ;;
+    esac  
+done 
+fi
 
-
-
+printf "%s " "--- ****** --- WELCOME to USE rm_tool 2023:) --- ****** ---"
+echo 
+echo Searching ${bold}{$word}${normal} in path ${bold}[$path]${normal} with ${bold}$option1${normal}
 printf "%s " "Press enter to continue if the above are all correct "
 read ans
 if ! [ -d "$searchLog_DIR" ]; then 
@@ -161,12 +180,7 @@ make > detail.log 2>&1
 echo ------ Build detail has been written to: build/detail.log ------
 cd ..
 
-if [ "$#" -ge 3 ]; then  
-    ./build/rm_tool ${@:1:$#-1} $option1
-else
-    ./build/rm_tool   $word $path    $option1
-fi 
-
+./build/rm_tool $path  $word    $option1
  
 
 echo ---Starting to delete unused code---
@@ -174,10 +188,10 @@ echo ---Starting to delete unused code---
 chmod +777 deleteList.sh
 ./deleteList.sh
 
-# mv searchLog/searchList.log  searchLog/searchList_`date +%Y_%m_%d_%H-%M-%S`.log
+
+mv searchLog/searchList.log  searchLog/searchList_`date +%Y_%m_%d_%H-%M-%S`.log
 # mv deleteList.sh ./deletedLog/deleteList_`date +%Y_%m_%d_%H-%M-%S`.log
 rm deleteList.sh
-rm -rf searchLog
 echo ------Deleting unused code Done!------
 
 

@@ -50,6 +50,7 @@ int find_start(FILE *fp,const int st_line)
     printf("Review %d searches\n", lines);
     rewind(fp);
 }
+
 int parse(FILE *fp_auto,const int st_line){
     int end_line=0;
     return find_start(fp_auto, st_line);
