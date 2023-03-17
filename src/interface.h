@@ -76,7 +76,7 @@ void process_search_log(FILE *fp, FILE *fp_d)
                     
                 }
                 current_line_num[temp_i++] = '\0';
-                printf("Real:%d",line_int-line_delta);
+                printf("Real: %d",line_int-line_delta);
                 printf("Cache: %d", line_int);
                 // printf("| (range of len: %d-%d), \n \n",first_colon_len,len);
                 printf("| \n \n");
