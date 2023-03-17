@@ -67,8 +67,7 @@ void flush_updateSearch(FILE *fp)
     char *cmd_ack = cmd_temp;
     rewind(fp);
     system(cmd_ack);
-    has_flush=true;
-    has_flush=true;
+    has_flush=false;
     // system("ack pixel ../test > ");
     
 }
