@@ -104,6 +104,7 @@ void print_deleteFile(FILE *fp,char * filename)
     
     fprintf(fp, "\n");
     has_delete=true;
+    has_flush=true;
 }
 
 void acknowledge()
