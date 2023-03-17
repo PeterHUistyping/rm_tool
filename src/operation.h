@@ -23,7 +23,7 @@ void pr_menu(){
     printf("%d [Vim]\n", vim);
     printf("%d [DELETE Mul lines]\n", delete_multiple);
     printf("%d [ack search]\n", ack);
-    printf("%d [DELETE File]\n",delete_file);
+    printf("%d [DELETE current file]\n",delete_file);
     printf("%d [Menu]\n",menu);
     printf("%d [Any other linux command on cwd]", linux_cmd);
     printf("     INPUT[0-%d]:", Last);

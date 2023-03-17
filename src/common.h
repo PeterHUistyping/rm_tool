@@ -22,15 +22,11 @@ FILE *fp_deleteLog;
 void acknowledge();
 bool has_delete=false;
 bool has_flush=false;
+bool delete_file_idChange=false;
 void flush_delete( FILE *fp_d)
 {
     acknowledge();
-    if(!has_delete){
-        return;
-    }
     fflush(fp_d);
-    
-
     system("bash deleteList.sh");
     has_delete=false;
     
@@ -52,9 +48,6 @@ void flush_delete( FILE *fp_d)
 }
 void flush_updateSearch(FILE *fp)
 {
-    if(!has_flush){
-        return;
-    }
     fflush(fp);
     system("> searchLog/searchList.log");
     char cmd_temp[buffer_size] = "ack ";
@@ -67,8 +60,7 @@ void flush_updateSearch(FILE *fp)
     rewind(fp);
     system(cmd_ack);
     has_flush=false;
-    // system("ack pixel ../test > ");
-    
+    // system("ack pixel ../test > ");    
 }
 
 
@@ -80,8 +72,6 @@ void print_singledeleteList(FILE *fp, int st_line)
         fprintf(fp, "%c", current_line[i]);
     }
     fprintf(fp, "\n");
-    has_delete=true;
-    has_flush=true;
 }
 
 void print_deleteList(FILE *fp, int st_line, int end_line)
@@ -92,8 +82,6 @@ void print_deleteList(FILE *fp, int st_line, int end_line)
         fprintf(fp, "%c", current_line[i]);
     }
     fprintf(fp, "\n");
-    has_delete=true;
-    has_flush=true;
 }
 
 void print_deleteFile(FILE *fp,char * filename)
@@ -101,8 +89,7 @@ void print_deleteFile(FILE *fp,char * filename)
     fprintf(fp, "sed file '%s' ", filename);
     
     fprintf(fp, "\n");
-    has_delete=true;
-    has_flush=true;
+    delete_file_idChange=true;
 }
 
 void acknowledge()

@@ -26,16 +26,17 @@ void process_search_log(FILE *fp, FILE *fp_d)
             {
                 if (!first_hit_colon)
                 {
-                    // printf("%d",strncmp(current_line, filename_last, len)); //debug
-                    if (strncmp(current_line, filename_last, len) == 0)
+                    if (strncmp(current_line, filename_last, len) != 0 && !delete_file_idChange)
                     {
-                        same_file = true;
+                        
+                        loop_id = 1;// new file
+                        loop_fileid++;
                         // printf("%d,%d",first_hit_colon,same_file); //debug
                     }
                     else
-                    { // new file
-                        loop_id = 1;
-                        loop_fileid++;
+                    { 
+                        delete_file_idChange=false;
+                        same_file = true; 
                     }
                 }
                 else
@@ -103,6 +104,11 @@ void process_search_log(FILE *fp, FILE *fp_d)
             {
                 printf("Exit loop!\n");
                 break;
+            }
+            if (delete_file_idChange)
+            {
+                loop_id = 1;// new file
+                loop_fileid++;
             }
             printf("\033[1m--------------------------------rm id: %d file:%d--------------------------------\n", loop_id++, loop_fileid);
             printf("\033[0m\n"); // black
