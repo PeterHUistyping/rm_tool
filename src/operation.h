@@ -10,12 +10,24 @@ enum op
     delete_multiple,
     ack,
     delete_file,
+    menu,
     linux_cmd,
     First = exit_switch,
     Last = linux_cmd,
 
 };
-
+void pr_menu(){
+    printf("%d [EXIT and Flush]\n", exit_switch);
+    printf("%d [SKIP this line]\n", skip);
+    printf("%d [DELETE single line]\n", delete_single);
+    printf("%d [Vim]\n", vim);
+    printf("%d [DELETE Mul lines]\n", delete_multiple);
+    printf("%d [ack search]\n", ack);
+    printf("%d [DELETE File]\n",delete_file);
+    printf("%d [Menu]\n",menu);
+    printf("%d [Any other linux command on cwd]", linux_cmd);
+    printf("     INPUT[0-%d]:", Last);
+}
 void switch_input(FILE *fp, FILE *fp_d, int *line_delta)
 {
     int operation = 0;
@@ -27,22 +39,17 @@ void switch_input(FILE *fp, FILE *fp_d, int *line_delta)
             first=false;
             printf("\033[1mPlease enter your operation choice:  "); // bold
             printf("\033[0m\n");                                    // black
-            printf("%d [EXIT and Flush]\n", exit_switch);
-            printf("%d [SKIP this line]\n", skip);
-            printf("%d [DELETE single line]\n", delete_single);
-            printf("%d [Vim]\n", vim);
-            printf("%d [DELETE Mul lines]\n", delete_multiple);
-            printf("%d [ack search]\n", ack);
-            printf("%d [DELETE File]\n",delete_file);
-            printf("%d [Any other linux command on cwd]", linux_cmd);
-            printf("     INPUT[0-%d]:", Last);
+            pr_menu();
         }
         else{
-            printf("INPUT[0-%d]:", Last);
+            printf("INPUT[0-%d] Press %d for Menu:", Last,menu);
         }        
         scanf("%d", &operation);
         switch (operation)
         {
+        case menu:
+            first=true;
+            break;
         case delete_file:
             flush_delete(fp_d, line_delta);
             {char cmd_tem[buffer_size] = "sudo rm -f ";
@@ -141,7 +148,7 @@ void switch_input(FILE *fp, FILE *fp_d, int *line_delta)
             printf("\033[33mFailure, Invalid input: %d! Please retry or exit. ", operation); // yellow
             printf("\033[0m\n");                                                             // black
         }
-        if (operation > Last || operation < First || operation == vim || operation == ack || operation == delete_multiple || operation == linux_cmd)
+        if (operation > Last || operation < First|| operation == menu  || operation == vim || operation == ack || operation == delete_multiple || operation == linux_cmd)
         {
             continue;
         }
