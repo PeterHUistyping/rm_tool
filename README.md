@@ -49,7 +49,7 @@ generate deletedLog with timestamp.
     v2: No need to flush deleteList this time.
 5. ack
 6. rm file
-7. rm function
+7. rm function, declaration
 
 Determine whether or not to flush deleteList and searchList depend on the properties of the function, whether it will read / write the state.
 

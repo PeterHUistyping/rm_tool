@@ -1,6 +1,7 @@
 # pragma once
 #include "util.h"
 #include "common.h"
+#include "parse.h"
 enum op
 {
     exit_switch,
@@ -11,6 +12,7 @@ enum op
     ack,
     delete_file,
     menu,
+    delete_auto,
     linux_cmd,
     First = exit_switch,
     Last = linux_cmd,
@@ -25,6 +27,7 @@ void pr_menu(){
     printf("%d [ack search]\n", ack);
     printf("%d [DELETE current file]\n",delete_file);
     printf("%d [Menu]\n",menu);
+    printf("%d [DELETE auto]\n",delete_auto);
     printf("%d [Any other linux command on cwd]", linux_cmd);
     printf("     INPUT[0-%d]:", Last);
 }
@@ -105,6 +108,26 @@ void switch_input(FILE *fp, FILE *fp_d)
             flush_updateSearch(fp);
             //printf("\n");
             break;
+        case delete_auto:
+            printf("\033[31m[DELETE auto] Well received!\n"); // red
+            printf("\033[0m\n");                              // black
+            printf("\033[1mPlease enter either the start line of the comments above the function:");
+            printf("\033[0m\n");    
+            scanf("%d", &st_line);
+            printf("To be deleted: \n\033[31m");
+        
+            // printf("\033[1mPlease enter the last line for deletion:");
+            // printf("\033[0m\n"); // black
+            // scanf("%d", &end_line);
+            FILE *fp_auto = fopen(filename_last, "a+");
+            openfile_check(fp_auto);
+            end_line=parse(fp_auto,st_line);
+            fclose(fp_auto);
+            print_deleteList(fp_deleteLog, st_line, end_line);
+            print_deleteList(fp_d, st_line, end_line);
+            flush_delete(fp_d);
+            flush_updateSearch(fp);
+            break;
         case delete_multiple: //write
             printf("\033[31m[DELETE Mul lines] Well received!\n"); // red
             printf("\033[0m\n");                                   // black
@@ -140,7 +163,7 @@ void switch_input(FILE *fp, FILE *fp_d)
             printf("\033[0m\n");                                                             // black
         }
 
-        if( operation == exit_switch || operation == skip|| operation == delete_single|| operation == delete_multiple||operation == delete_file)
+        if( operation == exit_switch || operation == skip|| operation == delete_auto ||operation == delete_single|| operation == delete_multiple||operation == delete_file)
         {
             break;
         }
