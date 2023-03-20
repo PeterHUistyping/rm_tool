@@ -17,8 +17,7 @@ void process_search_log(FILE *fp, FILE *fp_d)
     bool same_file = false;
     char filename_delete[buffer_size];
     char skip_this_file=false;
-    printf("\033[1m--------------------------------rm id: %d file:%d--------------------------------\n", loop_id++, loop_fileid);
-    printf("\033[0m\n"); // black
+    
     while ((ch = fgetc(fp)) != EOF)
     { //!
         if (ch == ':')
@@ -29,7 +28,7 @@ void process_search_log(FILE *fp, FILE *fp_d)
                 {
                     if(skip_f_num){
                         for(int i=0;i<skip_f_num;i++){
-                            printf("%s,%s\n",current_line, skip_file[i]);
+                            // printf("%s,%s\n",current_line, skip_file[i]);
                             if(strncmp(current_line, skip_file[i], strlen(skip_file[i])) == 0 ){
                                 skip_this_file=true;
                                 break;
@@ -48,13 +47,12 @@ void process_search_log(FILE *fp, FILE *fp_d)
                         }
 
                         if(add_new_skip){
-                            strncpy(skip_file[skip_f_num++], filename_last, len);
-                            printf("Update Skipped File: %s,%d\n",skip_file,skip_f_num);
+                            strncpy(skip_file[skip_f_num++], filename_last, len);   
+                            printf("Update Skipped File: %s (Overall %d files)\n\n",filename_last,skip_f_num); 
+                            loop_id = 1;// new file
+                            loop_fileid++;
                         }
-                        
-                        
-                        loop_id = 1;// new file
-                        loop_fileid++;
+
                         // printf("%d,%d",first_hit_colon,same_file); //debug
                     }
                     else
@@ -69,7 +67,10 @@ void process_search_log(FILE *fp, FILE *fp_d)
                 }
                 memset(filename_last, '\0', sizeof(filename_last));
                 strncpy(filename_last, current_line, len);
-
+                if(!skip_this_file){
+                    printf("\033[1m--------------------------------rm id: %d file:%d--------------------------------\n", loop_id++, loop_fileid);
+                    printf("\033[0m\n"); // black
+                }
                 if (!skip_this_file &&first_hit_colon || !same_file )
                 {
                      //printf("%d",skip_this_file);
@@ -139,11 +140,6 @@ void process_search_log(FILE *fp, FILE *fp_d)
                 loop_fileid++;
             }
                                
-            
-            if(!skip_this_file){
-                printf("\033[1m--------------------------------rm id: %d file:%d--------------------------------\n", loop_id++, loop_fileid);
-                printf("\033[0m\n"); // black
-            }
             skip_this_file=false;
             memset(current_line, '\0', sizeof(current_line));
         }
@@ -152,6 +148,6 @@ void process_search_log(FILE *fp, FILE *fp_d)
         ++lines;
 
     printf("Max_len of the a line is %d \n", max_len);
-    printf("Review %d files, %d searches\n",--loop_fileid, lines);
+    printf("Review %d files, %d searches\n",loop_fileid, lines);
     rewind(fp);
 }
