@@ -30,9 +30,8 @@ void flush_delete( FILE *fp_d)
     acknowledge();
     fflush(fp_d);
     system("bash deleteList.sh");   
-    system("echo # flushed > deleteList.sh");
-    
-    system("echo "" > deleteList.sh");
+    system("echo " " > deleteList.sh");
+   
     system("echo Flushed deleteList!");
 
     // fclose(fp);
@@ -48,16 +47,13 @@ void flush_delete( FILE *fp_d)
 void flush_updateSearch(FILE *fp)
 {
     fflush(fp);
-    system("> searchLog/searchList.log");
-    
- 
-    char cmd_temp[buffer_size] ;  
-    strncpy(cmd_temp,search_ack,strlen(search_ack));
-    strcat(cmd_temp, " > ./searchLog/searchList.log");
-    system("echo Flushed searchList!");
-    char * cmd_ack = cmd_temp;
+    system("> searchLog/searchList.log");  
+    char temp[buffer_size];
+    strcpy(temp,search_ack);
+    strcat(temp, " > ./searchLog/searchList.log");
     rewind(fp);
-    system(cmd_ack); 
+    system(temp); 
+    system("echo Flushed searchList!");
 }
 
 
