@@ -87,7 +87,9 @@ void switch_input(FILE *fp, FILE *fp_d)
             // execl("/usr/bin/vim","/usr/bin/vim",lines_,path,NULL);
             //}
             break;
-                case delete_file:
+        case delete_file:
+            printf("\033[31m[DELETE Current File] Well received!\n"); // red
+            printf("\033[0m\n");                                   // black
             {char cmd_tem[buffer_size] = "sudo rm -f ";
             strcat(cmd_tem, filename_last);
             system(cmd_tem);

@@ -115,8 +115,28 @@ void process_search_log(FILE *fp, FILE *fp_d)
         {
             if(!skip_this_file){
                 int match_num=0;
+                int first_c=true;
+                int second_c=false;
                 for (int i = 0; i < len; i++)
                 {
+                    if(first_c){
+                        if(current_line[i]==':'){
+                            printf("\033[0m\n"); //normal
+                            printf("\033[1;33m"); // yellow
+                            first_c=false;
+                            second_c=true;
+                            continue;
+                        }
+                        if(i==0){
+                            printf("\033[1;32m");//green
+                        }   
+                    }
+                    else if(second_c){
+                        if(current_line[i]==':'){
+                            printf("\033[0m"); //normal
+                            second_c=false;
+                        }
+                    }
                     bool match=false;
                     int st=i;
                     //  printf("%d,%c\n",match_num,current_line[st++]);
@@ -145,12 +165,12 @@ void process_search_log(FILE *fp, FILE *fp_d)
                         }
                     }
                     if(match_num==strlen(search_word)){
-                        printf("\033[42m"); // yellow
+                        printf("\033[43m"); // yellow 43
                          
                     }                   
                     printf("%c", current_line[i]);
                     if(match_num==1){
-                        printf("\033[0m");
+                        printf("\033[0m"); //normal
                     }
                     if(match_num){
                         match_num--;
