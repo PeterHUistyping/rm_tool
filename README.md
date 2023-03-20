@@ -37,7 +37,7 @@ Please enter your operation choice:
 8 [DELETE auto]
 9 [Any other linux command on cwd]     INPUT[0-9]:
 ```
-![del_single](./del_single.png)
+![del_single](./photo/del_single.png)
 Make use of enum, switch, file handling in C, system call.
 ## How to Use
 Place this repo at the same directory as your working_folder (to be cleaned and deleted).
@@ -125,6 +125,8 @@ generate deletedLog with timestamp.
 
 ## Update
 ### Update 20 Mar 2023
-Add memory of the skipped file.
-
+Add memory of the skipped file;
+Add highlight;
+Fix bugs
+![del_single](./photo/update1.png)
 cd /mnt/d/Work/Tools/rm_tool

@@ -41,8 +41,8 @@ void process_search_log(FILE *fp, FILE *fp_d)
                         bool add_new_skip=true;
                         for(int i=0;i<skip_f_num;i++){
                             if(strncmp(filename_last, skip_file[i], strlen(skip_file[i])) == 0 ){
-                                    add_new_skip=false;
-                                    break;
+                                add_new_skip=false;
+                                break;
                             }
                         }
 
@@ -73,7 +73,7 @@ void process_search_log(FILE *fp, FILE *fp_d)
                 }
                 if (!skip_this_file &&first_hit_colon || !same_file )
                 {
-                     //printf("%d",skip_this_file);
+                    //printf("%d",skip_this_file);
                     printf("File Name: |");
                     for (int i = 0; i < len; i++)
                     {
@@ -114,9 +114,48 @@ void process_search_log(FILE *fp, FILE *fp_d)
         if (ch == '\n')
         {
             if(!skip_this_file){
+                int match_num=0;
                 for (int i = 0; i < len; i++)
                 {
+                    bool match=false;
+                    int st=i;
+                    //  printf("%d,%c\n",match_num,current_line[st++]);
+                    if(!match_num){
+                        int j;
+                        for(j=0;j<strlen(search_word);j++){ 
+                            if(i<len){
+                                //printf("%c,%c\n",current_line[st++],search_word[j]);
+                                if(current_line[st++]==search_word[j]){
+                                    match=true;
+                                    // printf("%d",j);
+                                }
+                                else{
+                                    match=false;
+                                    break;
+                                } 
+                            }else{
+                                match=false;
+                                break;
+                            }
+                            if(j==strlen(search_word)-1){
+                                match=true;
+                                // printf("!");
+                                match_num=strlen(search_word);
+                            }
+                        }
+                    }
+                    if(match_num==strlen(search_word)){
+                        printf("\033[42m"); // yellow
+                         
+                    }                   
                     printf("%c", current_line[i]);
+                    if(match_num==1){
+                        printf("\033[0m");
+                    }
+                    if(match_num){
+                        match_num--;
+                    }
+                    
                 }
                 printf("\n");
                 switch_input(fp, fp_d);

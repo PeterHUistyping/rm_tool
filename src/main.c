@@ -13,7 +13,12 @@ int main(int argc, char *argv[])
     //     strncpy(search_word, argv[2], strlen(argv[2]));
     
     strncpy(search_ack,"ack ", strlen("ack "));
+    bool first_ack_arg=true;
     for(int i=1;i<argc-1;i++){
+        if(argv[i][0]!='-'&& first_ack_arg){
+            strcat(search_word, argv[i]);
+            first_ack_arg=false;
+        }
         strcat(search_ack, argv[i]);
         strcat(search_ack, " ");
     }
