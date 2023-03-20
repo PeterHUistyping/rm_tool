@@ -128,5 +128,5 @@ generate deletedLog with timestamp.
 Add memory of the skipped file;
 Add highlight;
 Fix bugs
-![del_single](./photo/update1.png)
+![del_single](./photo/Update1.png)
 cd /mnt/d/Work/Tools/rm_tool
