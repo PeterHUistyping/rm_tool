@@ -123,5 +123,8 @@ generate deletedLog with timestamp.
 
 **buffer** size fixed at 1000.
 
+## Update
+### Update 20 Mar 2023
+Add memory of the skipped file.
 
 cd /mnt/d/Work/Tools/rm_tool

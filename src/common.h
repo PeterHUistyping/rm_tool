@@ -23,6 +23,8 @@ char search_ack[buffer_size];
 FILE *fp_deleteLog;
 void acknowledge();
 bool delete_file_idChange=false;
+char skip_file[buffer_size][buffer_size];
+int skip_f_num=0;
 void flush_delete( FILE *fp_d)
 {
     acknowledge();
