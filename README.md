@@ -104,7 +104,7 @@ Advanced ./rm.sh SEARCH_WORD PATH [Other ack cmd] [-d]
      Caution: So far, only support no unpairing curly braces in the comment.<br/> 
      TO BE DONE: Untrace things in the comment.<br/>
       For things like class, ending }; needs to be on the same line.
-9. 9 [Any other linux command on cwd]
+9. [Any other linux command on cwd]
      
 
 Determine whether or not to flush deleteList and searchList depend on the properties of the function, whether it will read / write the state.
@@ -124,6 +124,8 @@ generate deletedLog with timestamp.
 **buffer** size fixed at 1000.
 
 ## Update
+### Update on design logic
+Change deletion and update from write back to write through, to enable stable functionality while maintaining multiple choices.
 ### Update 20 Mar 2023
 Add memory of the skipped file;
 Add highlight;
